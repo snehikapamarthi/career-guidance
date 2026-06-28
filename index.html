@@ -1,78 +1,457 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Career Guidance - Career Portal</title>
     <style>
-        * {margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif;}
-        html {scroll-behavior: smooth;}
-        body {background: #f8fafc; color: #1e293b;}
-        .navbar {background: #0f172a; color: white; padding: 15px 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1);}
-        .nav-content {max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;}
-        .nav-content h3 {color: #38bdf8; font-size: 1.5rem;}
-        .nav-links {display: flex; align-items: center; gap: 20px;}
-        .nav-links a {color: white; text-decoration: none; font-size: 0.85rem; cursor: pointer; white-space: nowrap;}
-        .nav-links a:hover {color: #38bdf8;}
-        .logout-btn {background: #dc2626; color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;}
-        .logout-btn:hover {background: #b91c1c;}
-        .logout-popup {display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center;}
-        .logout-box {background: #ffffff; padding: 30px 40px; border-radius: 12px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); max-width: 90%;}
-        .logout-box p {color: #dc2626; font-size: 1.2rem; font-weight: 700; margin: 0 0 25px 0;}
-        .logout-actions {display: flex; gap: 15px; justify-content: center;}
-        .yes-btn {background: #dc2626; color: white; border: none; padding: 10px 30px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;}
-        .yes-btn:hover {background: #b91c1c;}
-        .no-btn {background: #e2e8f0; color: #1e293b; border: none; padding: 10px 30px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;}
-        .no-btn:hover {background: #cbd5e1;}
-        .hero {background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%); color: white; padding: 40px 20px; text-align: center;}
-        .hero h1 {font-size: 2.5rem; margin-bottom: 15px;}
-        .hero p {font-size: 1.1rem; opacity: 0.95; max-width: 900px; margin: 0 auto;}
-        .container {max-width: 900px; margin: 0 auto; padding: 40px 20px;}
-        .sector-main {background: white; margin-bottom: 15px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); overflow: hidden; border: 2px solid #e2e8f0;}
-        .sector-header {background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 18px 25px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; font-weight: bold;}
-        .sector-header:hover {background: linear-gradient(135deg, #1e293b 0%, #334155 100%);}
-        .sector-content {padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.4s ease;}
-        .sector-content.active {padding: 25px; max-height: 30000px;}
-        .sub-section {margin-bottom: 25px; padding: 20px; background: #f8fafc; border-radius: 10px; border-left: 5px solid #0ea5e9;}
-        .sub-section:last-child {margin-bottom: 0;}
-        .sub-title {color: #0ea5e9; font-size: 1.1rem; font-weight: bold; margin-bottom: 15px;}
-        .item-grid {display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;}
-        .item {background: white; padding: 10px 12px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.85rem; transition: 0.2s; cursor: pointer;}
-        .item:hover {border-color: #0ea5e9; box-shadow: 0 2px 8px rgba(14,165,233,0.15); transform: translateX(3px);}
-        .item strong {color: #0f172a; display: block; margin-bottom: 3px; font-size: 0.9rem;}
-        .tag {background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; display: inline-block; margin: 1px; font-weight: 600;}
-        .tag-exam {background: #fef3c7; color: #92400e;}
-        .tag-govt {background: #ede9fe; color: #5b21b6;}
-        .tag-salary {background: #d1fae5; color: #065f46;}
-        .icon {transition: transform 0.3s;}
-        .icon.rotate {transform: rotate(180deg);}
-        .table-box {overflow-x: auto; margin-top: 15px;}
-        table {width: 100%; border-collapse: collapse; background: white;}
-        th, td {padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem;}
-        th {background: #0f172a; color: white;}
-        .roadmap {background: #e0f2fe; padding: 15px; border-radius: 10px; margin-top: 15px; font-weight: 600; text-align: center; color: #0369a1;}
-        .footer {background: #0f172a; color: white; text-align: center; padding: 30px; margin-top: 50px;}
-        .modal {display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); animation: fadeIn 0.3s;}
-        .modal-content {background-color: #fefefe; margin: 3% auto; padding: 0; border-radius: 15px; width: 90%; max-width: 700px; max-height: 85vh; overflow-y: auto; animation: slideDown 0.3s;}
-        .modal-header {background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%); color: white; padding: 20px 25px; border-radius: 15px 15px 0 0; display: flex; justify-content: space-between; align-items: center;}
-        .modal-header h2 {margin: 0; font-size: 1.5rem;}
-        .close {color: white; font-size: 32px; font-weight: bold; cursor: pointer; line-height: 1;}
-        .close:hover {opacity: 0.7;}
-        .modal-body {padding: 25px;}
-        .detail-row {margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #e2e8f0;}
-        .detail-row:last-child {border: none;}
-        .detail-label {color: #0ea5e9; font-weight: bold; font-size: 0.9rem; margin-bottom: 5px;}
-        .detail-value {color: #334155; font-size: 0.95rem; line-height: 1.6;}
-        @keyframes fadeIn {from {opacity: 0;} to {opacity: 1;}}
-        @keyframes slideDown {from {transform: translateY(-50px); opacity: 0;} to {transform: translateY(0); opacity: 1;}}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        .navbar {
+            background: #0f172a;
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-content h3 {
+            color: #38bdf8;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            color: #38bdf8;
+        }
+
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: #b91c1c;
+        }
+
+        .logout-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logout-box {
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            max-width: 90%;
+        }
+
+        .logout-box p {
+            color: #dc2626;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0 0 25px 0;
+        }
+
+        .logout-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .yes-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .yes-btn:hover {
+            background: #b91c1c;
+        }
+
+        .no-btn {
+            background: #e2e8f0;
+            color: #1e293b;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .no-btn:hover {
+            background: #cbd5e1;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .sector-main {
+            background: white;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 2px solid #e2e8f0;
+        }
+
+        .sector-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 18px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .sector-header:hover {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        }
+
+        .sector-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .sector-content.active {
+            padding: 25px;
+            max-height: 30000px;
+        }
+
+        .sub-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border-left: 5px solid #0ea5e9;
+        }
+
+        .sub-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .sub-title {
+            color: #0ea5e9;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .item {
+            background: white;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.85rem;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .item:hover {
+            border-color: #0ea5e9;
+            box-shadow: 0 2px 8px rgba(14, 165, 233, 0.15);
+            transform: translateX(3px);
+        }
+
+        .item strong {
+            color: #0f172a;
+            display: block;
+            margin-bottom: 3px;
+            font-size: 0.9rem;
+        }
+
+        .tag {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            display: inline-block;
+            margin: 1px;
+            font-weight: 600;
+        }
+
+        .tag-exam {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .tag-govt {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        .tag-salary {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .icon {
+            transition: transform 0.3s;
+        }
+
+        .icon.rotate {
+            transform: rotate(180deg);
+        }
+
+        .table-box {
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.85rem;
+        }
+
+        th {
+            background: #0f172a;
+            color: white;
+        }
+
+        .roadmap {
+            background: #e0f2fe;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: 600;
+            text-align: center;
+            color: #0369a1;
+        }
+
+        .footer {
+            background: #0f172a;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 3% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideDown 0.3s;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .close {
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .detail-row {
+            margin-bottom: 18px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .detail-row:last-child {
+            border: none;
+        }
+
+        .detail-label {
+            color: #0ea5e9;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: #334155;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
         @media (max-width: 768px) {
-          .hero h1 {font-size: 1.8rem;}
-          .nav-links a {display: none;}
-          .item-grid {grid-template-columns: 1fr;}
-          .modal-content {width: 95%; margin: 10% auto;}
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .nav-links a {
+                display: none;
+            }
+
+            .item-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="nav-content">
@@ -107,20 +486,29 @@
                 <div class="sub-section">
                     <div class="sub-title">Academic Streams</div>
                     <div class="item-grid">
-                        <div class="item" onclick="showDetails('MPC')"><strong>MPC</strong>Maths, Physics, Chemistry</div>
-                        <div class="item" onclick="showDetails('BiPC')"><strong>BiPC</strong>Biology, Physics, Chemistry</div>
-                        <div class="item" onclick="showDetails('MEC')"><strong>MEC</strong>Maths, Economics, Commerce</div>
-                        <div class="item" onclick="showDetails('CEC')"><strong>CEC</strong>Civics, Economics, Commerce</div>
-                        <div class="item" onclick="showDetails('HEC')"><strong>HEC</strong>History, Economics, Civics</div>
+                        <div class="item" onclick="showDetails('MPC')"><strong>MPC</strong>Maths, Physics, Chemistry
+                        </div>
+                        <div class="item" onclick="showDetails('BiPC')"><strong>BiPC</strong>Biology, Physics, Chemistry
+                        </div>
+                        <div class="item" onclick="showDetails('MEC')"><strong>MEC</strong>Maths, Economics, Commerce
+                        </div>
+                        <div class="item" onclick="showDetails('CEC')"><strong>CEC</strong>Civics, Economics, Commerce
+                        </div>
+                        <div class="item" onclick="showDetails('HEC')"><strong>HEC</strong>History, Economics, Civics
+                        </div>
                     </div>
                 </div>
                 <div class="sub-section">
                     <div class="sub-title">Vocational & Technical</div>
                     <div class="item-grid">
-                        <div class="item" onclick="showDetails('Vocational')"><strong>Vocational</strong>Computer, Automobile, Electrical</div>
-                        <div class="item" onclick="showDetails('Diploma')"><strong>Diploma</strong><span class="tag tag-exam">POLYCET</span></div>
-                        <div class="item" onclick="showDetails('ITI')"><strong>ITI</strong>Electrician, Fitter, Welder</div>
-                        <div class="item" onclick="showDetails('Open Schooling')"><strong>Open Schooling</strong>NIOS</div>
+                        <div class="item" onclick="showDetails('Vocational')"><strong>Vocational</strong>Computer,
+                            Automobile, Electrical</div>
+                        <div class="item" onclick="showDetails('Diploma')"><strong>Diploma</strong><span
+                                class="tag tag-exam">POLYCET</span></div>
+                        <div class="item" onclick="showDetails('ITI')"><strong>ITI</strong>Electrician, Fitter, Welder
+                        </div>
+                        <div class="item" onclick="showDetails('Open Schooling')"><strong>Open Schooling</strong>NIOS
+                        </div>
                     </div>
                 </div>
             </div>
@@ -136,7 +524,8 @@
                     <div class="sub-title">💻 Engineering & Technology</div>
                     <div class="item-grid">
                         <div class="item" onclick="showDetails('CSE')"><strong>CSE</strong>Computer Science</div>
-                        <div class="item" onclick="showDetails('AI & Data Science')"><strong>AI & Data Science</strong></div>
+                        <div class="item" onclick="showDetails('AI & Data Science')"><strong>AI & Data Science</strong>
+                        </div>
                         <div class="item" onclick="showDetails('IT')"><strong>IT</strong>Information Technology</div>
                         <div class="item" onclick="showDetails('ECE')"><strong>ECE</strong>Electronics</div>
                         <div class="item" onclick="showDetails('EEE')"><strong>EEE</strong>Electrical</div>
@@ -148,7 +537,8 @@
                 <div class="sub-section">
                     <div class="sub-title">⚕️ Medical & Health Sciences</div>
                     <div class="item-grid">
-                        <div class="item" onclick="showDetails('MBBS')"><strong>MBBS</strong><span class="tag tag-exam">NEET</span></div>
+                        <div class="item" onclick="showDetails('MBBS')"><strong>MBBS</strong><span
+                                class="tag tag-exam">NEET</span></div>
                         <div class="item" onclick="showDetails('BDS')"><strong>BDS</strong>Dental</div>
                         <div class="item" onclick="showDetails('BAMS')"><strong>BAMS</strong>Ayurveda</div>
                         <div class="item" onclick="showDetails('Nursing')"><strong>Nursing</strong>BSc Nursing</div>
@@ -169,10 +559,14 @@
                 <div class="sub-section">
                     <div class="sub-title">⚖️ Law & Others</div>
                     <div class="item-grid">
-                        <div class="item" onclick="showDetails('BA LLB')"><strong>BA LLB</strong><span class="tag tag-exam">CLAT</span></div>
-                        <div class="item" onclick="showDetails('BHM')"><strong>BHM</strong><span class="tag tag-exam">NCHMCT</span></div>
-                        <div class="item" onclick="showDetails('Pilot Training')"><strong>Pilot Training</strong>CPL</div>
-                        <div class="item" onclick="showDetails('Fashion Design')"><strong>Fashion Design</strong><span class="tag tag-exam">NIFT</span></div>
+                        <div class="item" onclick="showDetails('BA LLB')"><strong>BA LLB</strong><span
+                                class="tag tag-exam">CLAT</span></div>
+                        <div class="item" onclick="showDetails('BHM')"><strong>BHM</strong><span
+                                class="tag tag-exam">NCHMCT</span></div>
+                        <div class="item" onclick="showDetails('Pilot Training')"><strong>Pilot Training</strong>CPL
+                        </div>
+                        <div class="item" onclick="showDetails('Fashion Design')"><strong>Fashion Design</strong><span
+                                class="tag tag-exam">NIFT</span></div>
                     </div>
                 </div>
             </div>
@@ -186,19 +580,58 @@
             <div class="sector-content">
                 <div class="table-box">
                     <table>
-                        <tr><th>Exam</th><th>Eligibility</th></tr>
-                        <tr><td>JEE Main</td><td>MPC Intermediate</td></tr>
-                        <tr><td>JEE Advanced</td><td>JEE Main Qualified</td></tr>
-                        <tr><td>NEET</td><td>BiPC Intermediate</td></tr>
-                        <tr><td>EAMCET</td><td>MPC/BiPC</td></tr>
-                        <tr><td>CUET</td><td>Intermediate</td></tr>
-                        <tr><td>CLAT</td><td>Intermediate</td></tr>
-                        <tr><td>CAT</td><td>Any Degree</td></tr>
-                        <tr><td>GATE</td><td>B.Tech/B.E.</td></tr>
-                        <tr><td>UPSC CSE</td><td>Any Degree</td></tr>
-                        <tr><td>SSC CGL</td><td>Degree</td></tr>
-                        <tr><td>IBPS PO</td><td>Degree</td></tr>
-                        <tr><td>RRB NTPC</td><td>12th/Degree</td></tr>
+                        <tr>
+                            <th>Exam</th>
+                            <th>Eligibility</th>
+                        </tr>
+                        <tr>
+                            <td>JEE Main</td>
+                            <td>MPC Intermediate</td>
+                        </tr>
+                        <tr>
+                            <td>JEE Advanced</td>
+                            <td>JEE Main Qualified</td>
+                        </tr>
+                        <tr>
+                            <td>NEET</td>
+                            <td>BiPC Intermediate</td>
+                        </tr>
+                        <tr>
+                            <td>EAMCET</td>
+                            <td>MPC/BiPC</td>
+                        </tr>
+                        <tr>
+                            <td>CUET</td>
+                            <td>Intermediate</td>
+                        </tr>
+                        <tr>
+                            <td>CLAT</td>
+                            <td>Intermediate</td>
+                        </tr>
+                        <tr>
+                            <td>CAT</td>
+                            <td>Any Degree</td>
+                        </tr>
+                        <tr>
+                            <td>GATE</td>
+                            <td>B.Tech/B.E.</td>
+                        </tr>
+                        <tr>
+                            <td>UPSC CSE</td>
+                            <td>Any Degree</td>
+                        </tr>
+                        <tr>
+                            <td>SSC CGL</td>
+                            <td>Degree</td>
+                        </tr>
+                        <tr>
+                            <td>IBPS PO</td>
+                            <td>Degree</td>
+                        </tr>
+                        <tr>
+                            <td>RRB NTPC</td>
+                            <td>12th/Degree</td>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -213,10 +646,14 @@
                 <div class="sub-section">
                     <div class="sub-title">🏛️ Civil Services</div>
                     <div class="item-grid">
-                        <div class="item" onclick="showDetails('IAS')"><strong>IAS</strong><span class="tag tag-govt">UPSC</span></div>
-                        <div class="item" onclick="showDetails('IPS')"><strong>IPS</strong><span class="tag tag-govt">UPSC</span></div>
-                        <div class="item" onclick="showDetails('IFS')"><strong>IFS</strong><span class="tag tag-govt">UPSC</span></div>
-                        <div class="item" onclick="showDetails('IRS')"><strong>IRS</strong><span class="tag tag-govt">UPSC</span></div>
+                        <div class="item" onclick="showDetails('IAS')"><strong>IAS</strong><span
+                                class="tag tag-govt">UPSC</span></div>
+                        <div class="item" onclick="showDetails('IPS')"><strong>IPS</strong><span
+                                class="tag tag-govt">UPSC</span></div>
+                        <div class="item" onclick="showDetails('IFS')"><strong>IFS</strong><span
+                                class="tag tag-govt">UPSC</span></div>
+                        <div class="item" onclick="showDetails('IRS')"><strong>IRS</strong><span
+                                class="tag tag-govt">UPSC</span></div>
                     </div>
                 </div>
                 <div class="sub-section">
@@ -241,17 +678,21 @@
                     <div class="sub-title">🚂 Railways</div>
                     <div class="item-grid">
                         <div class="item" onclick="showDetails('RRB NTPC')"><strong>NTPC</strong>Station Master</div>
-                        <div class="item" onclick="showDetails('RRB Group D')"><strong>Group D</strong>Track Maintainer</div>
+                        <div class="item" onclick="showDetails('RRB Group D')"><strong>Group D</strong>Track Maintainer
+                        </div>
                         <div class="item" onclick="showDetails('RRB JE')"><strong>JE</strong>Junior Engineer</div>
-                        <div class="item" onclick="showDetails('RRB ALP')"><strong>ALP</strong>Assistant Loco Pilot</div>
+                        <div class="item" onclick="showDetails('RRB ALP')"><strong>ALP</strong>Assistant Loco Pilot
+                        </div>
                     </div>
                 </div>
                 <div class="sub-section">
                     <div class="sub-title">🪖 Defence</div>
                     <div class="item-grid">
-                        <div class="item" onclick="showDetails('Indian Army')"><strong>Army</strong>Officer/Soldier</div>
+                        <div class="item" onclick="showDetails('Indian Army')"><strong>Army</strong>Officer/Soldier
+                        </div>
                         <div class="item" onclick="showDetails('Indian Navy')"><strong>Navy</strong>Officer/Sailor</div>
-                        <div class="item" onclick="showDetails('Indian Air Force')"><strong>Air Force</strong>Officer/Airman</div>
+                        <div class="item" onclick="showDetails('Indian Air Force')"><strong>Air
+                                Force</strong>Officer/Airman</div>
                         <div class="item" onclick="showDetails('Coast Guard')"><strong>Coast Guard</strong></div>
                     </div>
                 </div>
@@ -267,19 +708,26 @@
                 <div class="sub-section">
                     <div class="sub-title">💻 IT & Tech Careers</div>
                     <div class="item-grid">
-                        <div class="item" onclick="showDetails('Software Development')"><strong>Software Development</strong><span class="tag tag-salary">6-30 LPA</span></div>
-                        <div class="item" onclick="showDetails('Artificial Intelligence')"><strong>Artificial Intelligence</strong><span class="tag tag-salary">12-40 LPA</span></div>
-                        <div class="item" onclick="showDetails('Data Science')"><strong>Data Science</strong><span class="tag tag-salary">8-30 LPA</span></div>
-                        <div class="item" onclick="showDetails('Cyber Security')"><strong>Cyber Security</strong><span class="tag tag-salary">8-25 LPA</span></div>
-                        <div class="item" onclick="showDetails('Cloud Computing')"><strong>Cloud Computing</strong><span class="tag tag-salary">10-30 LPA</span></div>
+                        <div class="item" onclick="showDetails('Software Development')"><strong>Software
+                                Development</strong><span class="tag tag-salary">6-30 LPA</span></div>
+                        <div class="item" onclick="showDetails('Artificial Intelligence')"><strong>Artificial
+                                Intelligence</strong><span class="tag tag-salary">12-40 LPA</span></div>
+                        <div class="item" onclick="showDetails('Data Science')"><strong>Data Science</strong><span
+                                class="tag tag-salary">8-30 LPA</span></div>
+                        <div class="item" onclick="showDetails('Cyber Security')"><strong>Cyber Security</strong><span
+                                class="tag tag-salary">8-25 LPA</span></div>
+                        <div class="item" onclick="showDetails('Cloud Computing')"><strong>Cloud Computing</strong><span
+                                class="tag tag-salary">10-30 LPA</span></div>
                     </div>
                 </div>
                 <div class="sub-section">
                     <div class="sub-title">🏥 Other Sectors</div>
                     <div class="item-grid">
-                        <div class="item" onclick="showDetails('Healthcare')"><strong>Healthcare</strong>Doctor, Nurse</div>
+                        <div class="item" onclick="showDetails('Healthcare')"><strong>Healthcare</strong>Doctor, Nurse
+                        </div>
                         <div class="item" onclick="showDetails('Finance')"><strong>Finance</strong>Analyst, Banker</div>
-                        <div class="item" onclick="showDetails('Marketing')"><strong>Marketing</strong>Digital Marketing</div>
+                        <div class="item" onclick="showDetails('Marketing')"><strong>Marketing</strong>Digital Marketing
+                        </div>
                         <div class="item" onclick="showDetails('Sales')"><strong>Sales</strong>Sales Executive</div>
                     </div>
                 </div>
@@ -327,9 +775,12 @@
                 <div class="sub-section" id="pg">
                     <div class="sub-title">📚 PG - Postgraduate</div>
                     <div class="item-grid">
-                        <div class="item" onclick="showDetails('M.Tech')"><strong>M.Tech</strong><span class="tag tag-exam">GATE</span></div>
-                        <div class="item" onclick="showDetails('MBA')"><strong>MBA</strong><span class="tag tag-exam">CAT</span></div>
-                        <div class="item" onclick="showDetails('MCA')"><strong>MCA</strong><span class="tag tag-exam">NIMCET</span></div>
+                        <div class="item" onclick="showDetails('M.Tech')"><strong>M.Tech</strong><span
+                                class="tag tag-exam">GATE</span></div>
+                        <div class="item" onclick="showDetails('MBA')"><strong>MBA</strong><span
+                                class="tag tag-exam">CAT</span></div>
+                        <div class="item" onclick="showDetails('MCA')"><strong>MCA</strong><span
+                                class="tag tag-exam">NIMCET</span></div>
                         <div class="item" onclick="showDetails('M.Sc')"><strong>M.Sc</strong>Science</div>
                         <div class="item" onclick="showDetails('MA')"><strong>MA</strong>Arts</div>
                         <div class="item" onclick="showDetails('M.Com')"><strong>M.Com</strong>Commerce</div>
@@ -340,7 +791,8 @@
                     <div class="sub-title">🔬 Research</div>
                     <div class="item-grid">
                         <div class="item" onclick="showDetails('PhD')"><strong>PhD</strong>Doctorate</div>
-                        <div class="item" onclick="showDetails('Post Doctoral')"><strong>Post Doctoral</strong>Research</div>
+                        <div class="item" onclick="showDetails('Post Doctoral')"><strong>Post Doctoral</strong>Research
+                        </div>
                     </div>
                 </div>
             </div>
@@ -355,12 +807,18 @@
                 <div class="sub-section">
                     <div class="sub-title">🚀 Business Opportunities</div>
                     <div class="item-grid">
-                        <div class="item" onclick="showDetails('Startup Founder')"><strong>Startup Founder</strong>Tech Startup</div>
-                        <div class="item" onclick="showDetails('E-Commerce')"><strong>E-Commerce</strong>Online Store</div>
-                        <div class="item" onclick="showDetails('Retail Business')"><strong>Retail Business</strong>Shop</div>
-                        <div class="item" onclick="showDetails('Franchise')"><strong>Franchise</strong>Brand Franchise</div>
-                        <div class="item" onclick="showDetails('Food Business')"><strong>Food Business</strong>Restaurant</div>
-                        <div class="item" onclick="showDetails('Digital Marketing Agency')"><strong>Digital Marketing Agency</strong>SEO, Ads</div>
+                        <div class="item" onclick="showDetails('Startup Founder')"><strong>Startup Founder</strong>Tech
+                            Startup</div>
+                        <div class="item" onclick="showDetails('E-Commerce')"><strong>E-Commerce</strong>Online Store
+                        </div>
+                        <div class="item" onclick="showDetails('Retail Business')"><strong>Retail Business</strong>Shop
+                        </div>
+                        <div class="item" onclick="showDetails('Franchise')"><strong>Franchise</strong>Brand Franchise
+                        </div>
+                        <div class="item" onclick="showDetails('Food Business')"><strong>Food
+                                Business</strong>Restaurant</div>
+                        <div class="item" onclick="showDetails('Digital Marketing Agency')"><strong>Digital Marketing
+                                Agency</strong>SEO, Ads</div>
                     </div>
                 </div>
             </div>
@@ -375,9 +833,9 @@
                 <div class="sub-section">
                     <div class="sub-title">🌍 Study Abroad Destinations</div>
                     <div class="item-grid">
-                        <div class="item" onclick="showDetails('USA')"><strong>United States</strong></div>
+                        <div class="item" onclick="showDetails('United States')"><strong>United States</strong></div>
                         <div class="item" onclick="showDetails('Canada')"><strong>Canada</strong></div>
-                        <div class="item" onclick="showDetails('UK')"><strong>United Kingdom</strong></div>
+                        <div class="item" onclick="showDetails('United Kingdom')"><strong>United Kingdom</strong></div>
                         <div class="item" onclick="showDetails('Australia')"><strong>Australia</strong></div>
                         <div class="item" onclick="showDetails('Germany')"><strong>Germany</strong></div>
                         <div class="item" onclick="showDetails('France')"><strong>France</strong></div>
@@ -387,27 +845,53 @@
                     <div class="sub-title">📝 International Exams</div>
                     <div class="table-box">
                         <table>
-                            <tr><th>Exam</th><th>Purpose</th></tr>
-                            <tr><td>IELTS</td><td>English Proficiency</td></tr>
-                            <tr><td>TOEFL</td><td>English Proficiency</td></tr>
-                            <tr><td>PTE</td><td>English Proficiency</td></tr>
-                            <tr><td>GRE</td><td>MS Admissions</td></tr>
-                            <tr><td>GMAT</td><td>MBA Admissions</td></tr>
-                            <tr><td>SAT</td><td>Undergraduate Admissions</td></tr>
+                            <tr>
+                                <th>Exam</th>
+                                <th>Purpose</th>
+                            </tr>
+                            <tr>
+                                <td>IELTS</td>
+                                <td>English Proficiency</td>
+                            </tr>
+                            <tr>
+                                <td>TOEFL</td>
+                                <td>English Proficiency</td>
+                            </tr>
+                            <tr>
+                                <td>PTE</td>
+                                <td>English Proficiency</td>
+                            </tr>
+                            <tr>
+                                <td>GRE</td>
+                                <td>MS Admissions</td>
+                            </tr>
+                            <tr>
+                                <td>GMAT</td>
+                                <td>MBA Admissions</td>
+                            </tr>
+                            <tr>
+                                <td>SAT</td>
+                                <td>Undergraduate Admissions</td>
+                            </tr>
                         </table>
                     </div>
                 </div>
                 <div class="sub-section">
                     <div class="sub-title">💼 Work Opportunities Abroad</div>
                     <div class="item-grid">
-                        <div class="item" onclick="showDetails('Software Engineer Abroad')"><strong>Software Engineer</strong><span class="tag tag-salary">$80k-200k</span></div>
-                        <div class="item" onclick="showDetails('Data Scientist Abroad')"><strong>Data Scientist</strong><span class="tag tag-salary">$90k-180k</span></div>
-                        <div class="item" onclick="showDetails('Doctor Abroad')"><strong>Doctor</strong><span class="tag tag-salary">$150k-400k</span></div>
-                        <div class="item" onclick="showDetails('Nurse Abroad')"><strong>Nurse</strong><span class="tag tag-salary">$60k-120k</span></div>
+                        <div class="item" onclick="showDetails('Software Engineer Abroad')"><strong>Software
+                                Engineer</strong><span class="tag tag-salary">$80k-200k</span></div>
+                        <div class="item" onclick="showDetails('Data Scientist Abroad')"><strong>Data
+                                Scientist</strong><span class="tag tag-salary">$90k-180k</span></div>
+                        <div class="item" onclick="showDetails('Doctor Abroad')"><strong>Doctor</strong><span
+                                class="tag tag-salary">$150k-400k</span></div>
+                        <div class="item" onclick="showDetails('Nurse Abroad')"><strong>Nurse</strong><span
+                                class="tag tag-salary">$60k-120k</span></div>
                     </div>
                 </div>
                 <div class="roadmap">
-                    🗺️ India to Abroad Roadmap: 10th → Intermediate → Degree → IELTS/GRE/GMAT → University Selection → Scholarship → Visa → Abroad Studies → International Jobs
+                    🗺️ India to Abroad Roadmap: 10th → Intermediate → Degree → IELTS/GRE/GMAT → University Selection →
+                    Scholarship → Visa → Abroad Studies → International Jobs
                 </div>
             </div>
         </div>
@@ -427,109 +911,436 @@
             </div>
             <div class="modal-body" id="modalBody"></div>
         </div>
-    </div>'BiPC': {fullName: 'Biology, Physics, Chemistry', eligibility: '10th Pass with 50%+ marks', duration: '2 Years Intermediate', nextSteps: 'MBBS, BDS, BAMS, BHMS, Nursing, Pharmacy, Agriculture, Veterinary', topExams: 'NEET, EAMCET, AIIMS', careerScope: 'Doctor, Dentist, Ayurveda, Homeopathy, Pharma, Research, Agriculture Officer', avgSalary: 'MBBS Doctor: 6-50 LPA. Pharmacy: 3-8 LPA'},
-            'MEC': {fullName: 'Maths, Economics, Commerce', eligibility: '10th Pass', duration: '2 Years Intermediate', nextSteps: 'B.Com, BBA, CA, CMA, CS, Economics, Banking', topExams: 'CUET, CA Foundation', careerScope: 'Accountant, Banker, Business Analyst, Entrepreneur, Civil Services', avgSalary: 'After Degree: 3-12 LPA. After CA: 8-25 LPA'},
-            'CEC': {fullName: 'Civics, Economics, Commerce', eligibility: '10th Pass', duration: '2 Years Intermediate', nextSteps: 'BA, B.Com, LLB, Civil Services, Journalism', topExams: 'CUET, CLAT', careerScope: 'Lawyer, Journalist, Public Administration, Political Analyst, IAS/IPS', avgSalary: 'After Degree: 2.5-8 LPA. After LLB: 4-15 LPA'},
-            'HEC': {fullName: 'History, Economics, Civics', eligibility: '10th Pass', duration: '2 Years Intermediate', nextSteps: 'BA, LLB, Civil Services, Archaeology, Teaching', topExams: 'CUET, CLAT, UPSC', careerScope: 'Historian, Archaeologist, Teacher, Civil Services, Museum Curator', avgSalary: 'After Degree: 2.5-7 LPA'},
-            'Vocational': {fullName: 'Vocational Courses', eligibility: '10th Pass', duration: '1-2 Years', nextSteps: 'Direct Job, Diploma, ITI Advanced Courses', topExams: 'State Level Vocational Exams', careerScope: 'Technician, Electrician, Mechanic, Computer Operator', avgSalary: '2-5 LPA'},
-            'Diploma': {fullName: 'Polytechnic Diploma', eligibility: '10th Pass', duration: '3 Years', nextSteps: 'B.Tech Lateral Entry to 2nd year, Government Jobs, Private Jobs', topExams: 'POLYCET, TS POLYCET', careerScope: 'Junior Engineer, Technician, Supervisor in Govt and Private sectors', avgSalary: 'Diploma holder: 2.5-6 LPA. After B.Tech: 4-15 LPA'},
-            'ITI': {fullName: 'Industrial Training Institute', eligibility: '10th Pass', duration: '1-2 Years', nextSteps: 'Technician Jobs, Apprentice, Government Jobs', topExams: 'State ITI Entrance', careerScope: 'Electrician, Fitter, Welder, Mechanic, COPA in Railways, PSUs', avgSalary: '2-4.5 LPA'},
-            'Open Schooling': {fullName: 'NIOS - National Institute of Open Schooling', eligibility: 'No age limit', duration: 'Flexible', nextSteps: 'Intermediate, Degree, Any course', topExams: 'NIOS Board Exams', careerScope: 'Same as regular schooling. Flexible for working students', avgSalary: 'Depends on further education'},
-            'CSE': {fullName: 'Computer Science Engineering', eligibility:'MPC Intermediate with 60%+', duration:'4 Years B.Tech', nextSteps: 'M.Tech, MS Abroad, MBA, Government Jobs', topExams: 'JEE Main, EAMCET, BITSAT', careerScope: 'Software Developer, AI Engineer, Data Scientist, Web Developer, IT Consultant', avgSalary: '6-40 LPA. Top companies: 20-60 LPA'},
-            'AI & Data Science': {fullName: 'Artificial Intelligence & Data Science', eligibility: 'MPC Intermediate with 60%+', duration: '4 Years B.Tech', nextSteps: 'M.Tech, MS, Research, Startups', topExams: 'JEE Main, GATE for PG', careerScope: 'AI Engineer, ML Engineer, Data Scientist, Research Scientist', avgSalary: '12-40 LPA. High demand globally'},
-            'IT': {fullName: 'Information Technology', eligibility: 'MPC Intermediate', duration: '4 Years B.Tech', nextSteps: 'M.Tech, MS, MBA, Jobs', topExams: 'JEE Main, EAMCET', careerScope: 'Software Engineer, System Admin, Network Engineer, Cloud Engineer', avgSalary: '5-25 LPA'},
-            'ECE': {fullName: 'Electronics & Communication Engineering', eligibility: 'MPC Intermediate', duration: '4 Years B.Tech', nextSteps: 'M.Tech, MS, Government Jobs, Core Jobs', topExams: 'JEE Main, GATE', careerScope: 'Electronics Engineer, Telecom, VLSI, Embedded Systems, ISRO, DRDO', avgSalary: '4-20 LPA'},
-            'EEE': {fullName: 'Electrical & Electronics Engineering', eligibility: 'MPC Intermediate', duration: '4 Years B.Tech', nextSteps: 'M.Tech, Government Jobs, PSU', topExams: 'JEE Main, GATE', careerScope: 'Electrical Engineer, Power Sector, NTPC, Power Grid, Railways', avgSalary: '4-18 LPA'},
-            'Mechanical': {fullName: 'Mechanical Engineering', eligibility: 'MPC Intermediate', duration: '4 Years B.Tech', nextSteps: 'M.Tech, MS, MBA, Government Jobs', topExams: 'JEE Main, GATE', careerScope: 'Design Engineer, Production, Automobile, Manufacturing, PSUs', avgSalary: '3.5-15 LPA'},
-            'Civil': {fullName: 'Civil Engineering', eligibility: 'MPC Intermediate', duration: '4 Years B.Tech', nextSteps: 'M.Tech, Government Jobs, Construction', topExams: 'JEE Main, GATE', careerScope: 'Site Engineer, Structural Engineer, PWD, CPWD, Private Construction', avgSalary: '3-12 LPA'},
-            'Aerospace': {fullName: 'Aerospace Engineering', eligibility: 'MPC Intermediate with 75%+', duration: '4 Years B.Tech', nextSteps: 'M.Tech, MS, ISRO, DRDO, Airlines', topExams: 'JEE Advanced, IIST', careerScope: 'Aircraft Design, ISRO, HAL, Boeing, Airbus, Research', avgSalary: '8-30 LPA'},
-            'MBBS': {fullName: 'Bachelor of Medicine & Bachelor of Surgery', eligibility: 'BiPC with 50%+, NEET Qualified', duration: '5.5 Years including internship', nextSteps: 'MD/MS, DM/MCh, Practice, Government Doctor', topExams: 'NEET UG, NEET PG', careerScope: 'General Physician, Surgeon, Specialist Doctor, Medical Officer', avgSalary: '6-50 LPA. Specialists: 15-80 LPA'},
-            'BDS': {fullName: 'Bachelor of Dental Surgery', eligibility: 'BiPC with 50%+, NEET Qualified', duration: '5 Years including internship', nextSteps: 'MDS, Private Clinic, Government Job', topExams: 'NEET UG', careerScope: 'Dentist, Orthodontist, Oral Surgeon', avgSalary: '4-25 LPA'},
-            'BAMS': {fullName: 'Bachelor of Ayurvedic Medicine & Surgery', eligibility: 'BiPC, NEET Qualified', duration: '5.5 Years', nextSteps: 'MD Ayurveda, Practice, Government Job', topExams: 'NEET UG', careerScope: 'Ayurvedic Doctor, Panchakarma Specialist', avgSalary: '3-15 LPA'},
-            'Nursing': {fullName: 'BSc Nursing', eligibility: 'BiPC with 45%+', duration: '4 Years', nextSteps: 'MSc Nursing, Hospital Jobs, Abroad', topExams: 'NEET, State Nursing CET', careerScope: 'Staff Nurse, Nursing Officer, Abroad: UK, Canada, Australia', avgSalary: '2.5-8 LPA. Abroad: 40-80 LPA'},
-            'Pharmacy': {fullName: 'Bachelor of Pharmacy', eligibility: 'BiPC or MPC', duration: '4 Years', nextSteps: 'M.Pharm, Pharma Industry, Drug Inspector', topExams: 'EAMCET, GPAT for PG', careerScope: 'Pharmacist, Drug Inspector, Pharma Companies, Research', avgSalary: '2.5-10 LPA'},
-            'Physiotherapy': {fullName: 'Bachelor of Physiotherapy', eligibility: 'BiPC', duration: '4.5 Years', nextSteps: 'MPT, Private Clinic, Hospitals', topExams: 'NEET, State CET', careerScope: 'Physiotherapist, Sports Physio, Rehabilitation', avgSalary: '3-12 LPA'},
-            'B.Com': {fullName: 'Bachelor of Commerce', eligibility: 'MEC/CEC/HEC Intermediate', duration: '3 Years', nextSteps: 'M.Com, MBA, CA, CMA, CS, Banking', topExams: 'CUET, CA Foundation', careerScope: 'Accountant, Banker, Auditor, Tax Consultant', avgSalary: '2.5-8 LPA'},
-            'BBA': {fullName: 'Bachelor of Business Administration', eligibility: 'Any stream Intermediate', duration: '3 Years', nextSteps: 'MBA, Jobs, Start own business', topExams: 'CUET, IPMAT', careerScope: 'Manager, HR, Marketing, Operations, Entrepreneur', avgSalary: '3-12 LPA'},
-            'CA': {fullName: 'Chartered Accountant', eligibility: '12th Pass, CA Foundation', duration: '4-5 Years', nextSteps: 'Practice, Job in MNCs, Banks, Audit Firms', topExams: 'CA Foundation, Inter, Final', careerScope: 'Auditor, Tax Consultant, CFO, Financial Analyst', avgSalary: '8-25 LPA. Partners: 30-80 LPA'},
-            'CMA': {fullName: 'Cost & Management Accountant', eligibility: '12th Pass', duration: '3-4 Years', nextSteps: 'Practice, Cost Audit, Industry Jobs', topExams: 'CMA Foundation, Inter, Final', careerScope: 'Cost Auditor, Management Accountant, CFO', avgSalary: '7-20 LPA'},
-            'CS': {fullName: 'Company Secretary', eligibility: '12th Pass', duration: '3-4 Years', nextSteps: 'Practice, Corporate Jobs', topExams: 'CSEET, Executive, Professional', careerScope: 'Company Secretary, Legal Compliance, Corporate Governance', avgSalary: '6-18 LPA'},
-            'BA LLB': {fullName: 'Bachelor of Arts + Bachelor of Law', eligibility: 'Any stream Intermediate', duration: '5 Years', nextSteps: 'LLM, Practice, Judiciary, Corporate Law', topExams: 'CLAT, AILET, LSAT', careerScope: 'Advocate, Judge, Legal Advisor, Corporate Lawyer', avgSalary: '4-20 LPA. Senior Lawyers: 50+ LPA'},
-            'BHM': {fullName: 'Bachelor of Hotel Management', eligibility: 'Any stream Intermediate', duration: '4 Years', nextSteps: 'MHM, Hotel Industry, Cruise, Airlines', topExams: 'NCHMCT JEE', careerScope: 'Hotel Manager, Chef, F&B Manager, Cruise Line', avgSalary: '3-15 LPA'},
-            'Pilot Training': {fullName: 'Commercial Pilot License', eligibility: 'MPC with 50%+, Medical Fit', duration: '18-24 Months', nextSteps: 'Airline Pilot, Charter Pilot', topExams: 'DGCA Exams', careerScope: 'Airline Pilot: Indigo, Air India, Vistara, International', avgSalary: '15-80 LPA. Captain: 50-120 LPA'},
-            'Fashion Design': {fullName: 'Bachelor of Design - Fashion', eligibility: 'Any stream Intermediate', duration: '4 Years', nextSteps: 'M.Des, Own Label, Fashion Houses', topExams: 'NIFT, NID, UCEED', careerScope: 'Fashion Designer, Stylist, Merchandiser, Boutique Owner', avgSalary: '3-20 LPA'},
-            'IAS': {fullName: 'Indian Administrative Service', eligibility: 'Any Degree, Age 21-32 years', duration: 'Training: 2 Years at LBSNAA', nextSteps: 'District Collector, Secretary, Cabinet Secretary', topExams: 'UPSC Civil Services Exam - Prelims, Mains, Interview', careerScope: 'Top administrative post in India. Policy making, district administration, governance', avgSalary: 'Starting: 56,100 per month. Cabinet Secretary: 2,50,000 per month + perks'},
-            'IPS': {fullName: 'Indian Police Service', eligibility: 'Any Degree, Age 21-32 years', duration: 'Training: 2 Years at SVPNPA', nextSteps: 'SP, DIG, IG, DGP', topExams: 'UPSC Civil Services Exam', careerScope: 'Law and order, crime investigation, intelligence, security', avgSalary: 'Starting: 56,100 per month. DGP: 2,25,000 per month + perks'},
-            'IFS': {fullName: 'Indian Foreign Service', eligibility: 'Any Degree, Age 21-32 years', duration: 'Training: 3 Years', nextSteps: 'Ambassador, High Commissioner, MEA Secretary', topExams: 'UPSC Civil Services Exam', careerScope: 'Diplomacy, International Relations, Embassy Postings', avgSalary: 'Starting: 56,100 per month + foreign allowance'},
-            'IRS': {fullName: 'Indian Revenue Service', eligibility: 'Any Degree, Age 21-32 years', duration: 'Training: 16 months', nextSteps: 'Income Tax Commissioner, Customs Commissioner', topExams: 'UPSC Civil Services Exam', careerScope: 'Tax Administration, Customs, GST, Enforcement', avgSalary: 'Starting: 56,100 per month + perks'},
-            'SBI PO': {fullName: 'State Bank of India Probationary Officer', eligibility: 'Any Degree, Age 21-30 years', duration: 'Training: 2 Years probation', nextSteps: 'Assistant Manager, Branch Manager, AGM, GM', topExams: 'SBI PO Exam - Prelims, Mains, GD, Interview', careerScope: 'Banking operations, loans, customer service, branch management', avgSalary: 'Starting: 41,960 per month + allowances. Total CTC: 8-13 LPA'},
-            'IBPS PO': {fullName: 'Institute of Banking Personnel Selection PO', eligibility: 'Any Degree, Age 20-30 years', duration: 'Training: 2 Years probation', nextSteps: 'Assistant Manager, Manager, Senior Manager in PSU Banks', topExams: 'IBPS PO - Prelims, Mains, Interview', careerScope: 'Public Sector Banks: PNB, BOB, Canara Bank, Union Bank', avgSalary: 'Starting: 36,000 per month. Total CTC: 7-10 LPA'},
-            'RBI': {fullName: 'Reserve Bank of India', eligibility: 'Graduate for Assistant, PG for Grade B', duration: 'Training: 6 months', nextSteps: 'Assistant, Grade B Officer, GM', topExams: 'RBI Grade B, RBI Assistant', careerScope: 'Central Bank, Monetary Policy, Banking Regulation', avgSalary: 'Grade B: 77,000 per month. Total CTC: 15-20 LPA'},
-            'NABARD': {fullName: 'National Bank for Agriculture & Rural Development', eligibility: 'Graduate, Age 21-30', duration: 'Training: 6 months', nextSteps: 'Development Assistant, Grade A Officer', topExams: 'NABARD Grade A/B', careerScope: 'Rural Development, Agriculture Finance, Policy', avgSalary: 'Grade A: 44,500 per month. Total CTC: 10-15 LPA'},
-            'SSC CGL': {fullName: 'Staff Selection Commission Combined Graduate Level', eligibility: 'Any Degree, Age 18-32 years', duration: 'NA', nextSteps: 'Income Tax Inspector, Assistant Section Officer, Auditor, Accountant', topExams: 'SSC CGL - Tier 1, Tier 2, Tier 3, Tier 4', careerScope: 'Central Govt departments: Income Tax, CBI, MEA, Railways, Postal', avgSalary: 'Level 6-8: 35,400 to 1,12,400 per month + DA, HRA'},
-            'SSC CHSL': {fullName: 'Combined Higher Secondary Level', eligibility: '12th Pass, Age 18-27 years', duration: 'NA', nextSteps: 'LDC, DEO, Postal Assistant', topExams: 'SSC CHSL - Tier 1, Tier 2, Typing Test', careerScope: 'Clerical jobs in Central Govt departments', avgSalary: 'Level 2-4: 19,900 to 63,200 per month'},
-            'SSC MTS': {fullName: 'Multi Tasking Staff', eligibility: '10th Pass, Age 18-25 years', duration: 'NA', nextSteps: 'Peon, Daftary, Jamadar', topExams: 'SSC MTS - Paper 1, Paper 2', careerScope: 'Group C non-technical posts in Central Govt', avgSalary: 'Level 1: 18,000 to 56,900 per month'},
-            'SSC GD': {fullName: 'General Duty Constable', eligibility: '10th Pass, Age 18-23 years', duration: 'Training: 6 months', nextSteps: 'Constable, Head Constable', topExams: 'SSC GD - CBE, PET, PST, Medical', careerScope: 'CAPF: BSF, CRPF, CISF, ITBP, SSB', avgSalary: 'Level 3: 21,700 to 69,100 per month'},
-            'RRB NTPC': {fullName: 'Railway Recruitment Board Non-Technical Popular Categories', eligibility: '12th Pass or Graduate, Age 18-33 years', duration: 'Training: 6 months to 1 year', nextSteps: 'Station Master, Goods Guard, Clerk, Ticket Collector', topExams: 'RRB NTPC - CBT 1, CBT 2, Typing Test, Document Verification', careerScope: 'Indian Railways - largest employer. Job security, pension, medical', avgSalary: 'Level 2-6: 19,900 to 35,400 per month + allowances'},
-            'RRB Group D': {fullName: 'Railway Group D', eligibility: '10th Pass, Age 18-33 years', duration: 'Training: 3 months', nextSteps: 'Track Maintainer, Helper, Assistant', topExams: 'RRB Group D - CBT, PET, Medical', careerScope: 'Track maintenance, workshop, signal, electrical', avgSalary: 'Level 1: 18,000 to 56,900 per month'},
-            'RRB JE': {fullName: 'Junior Engineer', eligibility: 'Diploma or B.Tech, Age 18-33 years', duration: 'Training: 6 months', nextSteps: 'Senior Section Engineer, SSE', topExams: 'RRB JE - CBT 1, CBT 2, Document Verification', careerScope: 'Civil, Mechanical, Electrical, S&T in Railways', avgSalary: 'Level 6: 35,400 to 1,12,400 per month'},
-            'RRB ALP': {fullName: 'Assistant Loco Pilot', eligibility: '10th + ITI or Diploma in Engineering, Age 18-30 years', duration: 'Training: 1 Year', nextSteps: 'Loco Pilot, Senior Loco Pilot, Loco Inspector', topExams: 'RRB ALP - CBT 1, CBT 2, CBAT, Document Verification', careerScope: 'Drive trains, responsible for passenger safety, technical job', avgSalary: 'Level 2: 19,900 per month + running allowance 15,000-25,000. Total: 45,000-60,000 per month'},
-            'Indian Army': {fullName: 'Indian Army', eligibility: '10th/12th/Graduate based on entry', duration: 'Training: 6 months to 1.5 years', nextSteps: 'Soldier, JCO, Officer through NDA/CDS/AFCAT', topExams: 'Agniveer, NDA, CDS, AFCAT, TES', careerScope: 'Defend nation, disaster relief, UN peacekeeping, adventure', avgSalary: 'Agniveer: 30,000 per month. Officer: 56,100 per month + MSP + allowances'},
-            'Indian Navy': {fullName: 'Indian Navy', eligibility: '10th/12th/B.Tech based on entry', duration: 'Training: 6 months to 4 years', nextSteps: 'Sailor, Officer through NDA/CDS/INET', topExams: 'Agniveer, NDA, CDS, INET', careerScope: 'Naval operations, submarine, aviation, marine engineering', avgSalary: 'Sailor: 21,700 per month. Officer: 56,100 per month + allowances'},
-            'Indian Air Force': {fullName: 'Indian Air Force', eligibility: '10th/12th/Graduate based on entry', duration: 'Training: 6 months to 1.5 years', nextSteps: 'Airman, Officer through NDA/CDS/AFCAT', topExams: 'Agniveer, NDA, CDS, AFCAT', careerScope: 'Pilot, Engineer, Ground Duty, Air Traffic Control', avgSalary: 'Airman: 26,900 per month. Officer: 56,100 per month + allowances'},
-            'Coast Guard': {fullName: 'Indian Coast Guard', eligibility: '10th/12th/Graduate', duration: 'Training: 6 months', nextSteps: 'Navik, Yantrik, Assistant Commandant', topExams: 'ICG Navik, ICG Yantrik, AC', careerScope: 'Maritime security, search and rescue, pollution control', avgSalary: 'Navik: 21,700 per month. AC: 56,100 per month'},
-            'Software Development': {fullName: 'Software Developer', eligibility: 'B.Tech/BCA/MCA or equivalent skills', duration: 'NA', nextSteps: 'Senior Developer, Tech Lead, Architect, CTO', topExams: 'Company specific coding tests', careerScope: 'Build applications, websites, software products in IT companies', avgSalary: '6-30 LPA. MNCs: 15-60 LPA'},
-            'Artificial Intelligence': {fullName: 'AI/ML Engineer', eligibility: 'B.Tech/M.Tech in CS/IT/Data Science', duration: 'NA', nextSteps: 'Senior AI Engineer, Research Scientist, AI Architect', topExams: 'GATE, Company tests', careerScope: 'Build AI models, ChatGPT, Self-driving cars, Recommendation systems', avgSalary: '12-40 LPA. Top: 50-100 LPA'},
-            'Data Science': {fullName: 'Data Scientist', eligibility: 'B.Tech/B.Sc Stats/Maths/MCA', duration: 'NA', nextSteps: 'Senior Data Scientist, Head of Data, CDO', topExams: 'Company tests', careerScope: 'Analyze data, build ML models, business insights', avgSalary: '8-30 LPA'},
-            'Cyber Security': {fullName: 'Cyber Security Analyst', eligibility: 'B.Tech/BCA with certifications', duration: 'NA', nextSteps: 'Ethical Hacker, Security Architect, CISO', topExams: 'CEH, CISSP, CompTIA', careerScope: 'Protect systems, ethical hacking, security audit', avgSalary: '8-25 LPA'},
-            'Cloud Computing': {fullName: 'Cloud Engineer', eligibility: 'B.Tech/BCA + AWS/Azure/GCP', duration: 'NA', nextSteps: 'Cloud Architect, DevOps Engineer', topExams: 'AWS, Azure Certifications', careerScope: 'AWS, Azure, Google Cloud infrastructure', avgSalary: '10-30 LPA'},
-            'Healthcare': {fullName: 'Healthcare Professional', eligibility: 'MBBS/BDS/BAMS/Nursing/Pharmacy', duration: 'Varies', nextSteps: 'Specialization, Own Clinic, Hospital Admin', topExams: 'NEET PG, Hospital tests', careerScope: 'Doctor, Nurse, Pharmacist in hospitals, clinics', avgSalary: '3-50 LPA based on specialization'},
-            'Finance': {fullName: 'Finance Professional', eligibility: 'B.Com/MBA/CA/CFA', duration: 'NA', nextSteps: 'Senior Analyst, Manager, CFO', topExams: 'CFA, FRM', careerScope: 'Investment Banking, Corporate Finance, Equity Research', avgSalary: '6-40 LPA'},
-            'Marketing': {fullName: 'Marketing Professional', eligibility: 'BBA/MBA', duration: 'NA', nextSteps: 'Brand Manager, Marketing Head, CMO', topExams: 'CAT, Company tests', careerScope: 'Digital Marketing, Brand Management, Sales, Advertising', avgSalary: '4-25 LPA'},
-            'Sales': {fullName: 'Sales Executive/Manager', eligibility: 'Any Degree', duration: 'NA', nextSteps: 'Sales Manager, Regional Manager, VP Sales', topExams: 'Company tests', careerScope: 'B2B, B2C Sales, Business Development', avgSalary: '3-20 LPA + incentives'},
-            'CFA': {fullName: 'Chartered Financial Analyst', eligibility: 'Graduate', duration: '2-3 Years', nextSteps: 'Investment Banking, Portfolio Management', topExams: 'CFA Level 1, 2, 3', careerScope: 'Equity Research, Investment Banking, Asset Management', avgSalary: '12-40 LPA'},
-            'ACCA': {fullName: 'Association of Chartered Certified Accountants', eligibility: '12th Pass', duration: '3 Years', nextSteps: 'Global Accounting Jobs, MNCs', topExams: 'ACCA 13 papers', careerScope: 'Global accountant, Big 4: Deloitte, EY, KPMG, PwC', avgSalary: '8-25 LPA'},
-            'B.Tech': {fullName: 'Bachelor of Technology', eligibility: 'MPC Intermediate', duration: '4 Years', nextSteps: 'M.Tech, MS, MBA, Jobs, UPSC', topExams: 'JEE Main, EAMCET', careerScope: 'Engineer in IT, Core, PSU, Government', avgSalary: '4-30 LPA'},
-            'B.Sc': {fullName: 'Bachelor of Science', eligibility: 'MPC/BiPC Intermediate', duration: '3 Years', nextSteps: 'M.Sc, B.Ed, Government Jobs', topExams: 'CUET', careerScope: 'Teacher, Research, Lab Technician, IT', avgSalary: '2.5-8 LPA'},
-            'BA': {fullName: 'Bachelor of Arts', eligibility: 'Any stream Intermediate', duration: '3 Years', nextSteps: 'MA, B.Ed, LLB, UPSC', topExams: 'CUET', careerScope: 'Teacher, Civil Services, Journalism, Social Work', avgSalary: '2-6 LPA'},
-            'BCA': {fullName: 'Bachelor of Computer Applications', eligibility: 'Any stream with Maths', duration: '3 Years', nextSteps: 'MCA, IT Jobs', topExams: 'CUET', careerScope: 'Software Developer, Web Developer, IT Support', avgSalary: '2.5-10 LPA'},
-            'LLB': {fullName: 'Bachelor of Law', eligibility: 'Any Degree', duration: '3 Years', nextSteps: 'LLM, Practice, Judiciary', topExams: 'CLAT PG, AILET PG', careerScope: 'Advocate, Legal Advisor, Judge', avgSalary: '3-15 LPA'},
-            'M.Tech': {fullName: 'Master of Technology', eligibility: 'B.Tech + GATE', duration: '2 Years', nextSteps: 'PhD, Research, Senior Engineer, Teaching', topExams: 'GATE', careerScope: 'Specialist Engineer, R&D, Professor, PSU', avgSalary: '8-25 LPA'},
-            'MBA': {fullName: 'Master of Business Administration', eligibility: 'Any Degree + CAT/MAT', duration: '2 Years', nextSteps: 'Manager, Consultant, Entrepreneur', topExams: 'CAT, XAT, GMAT', careerScope: 'Management roles in all sectors, Consulting, Banking', avgSalary: '8-40 LPA. IIMs: 20-60 LPA'},
-            'MCA': {fullName: 'Master of Computer Applications', eligibility: 'BCA/B.Sc Maths + NIMCET', duration: '2 Years', nextSteps: 'IT Jobs, Teaching', topExams: 'NIMCET, CUET PG', careerScope: 'Software Developer, System Analyst, IT Manager', avgSalary: '4-15 LPA'},
-            'M.Sc': {fullName: 'Master of Science', eligibility: 'B.Sc', duration: '2 Years', nextSteps: 'PhD, Research, Teaching, Industry', topExams: 'CUET PG, IIT JAM', careerScope: 'Scientist, Researcher, Professor, Lab Manager', avgSalary: '3-12 LPA'},
-            'MA': {fullName: 'Master of Arts', eligibility: 'BA', duration: '2 Years', nextSteps: 'PhD, Teaching, Civil Services', topExams: 'CUET PG', careerScope: 'Professor, Researcher, Writer, Civil Services', avgSalary: '2.5-10 LPA'},
-            'M.Com': {fullName: 'Master of Commerce', eligibility: 'B.Com', duration: '2 Years', nextSteps: 'PhD, Teaching, CA, Banking', topExams: 'CUET PG', careerScope: 'Professor, Accountant, Financial Analyst', avgSalary: '3-12 LPA'},
-            'LLM': {fullName: 'Master of Law', eligibility: 'LLB', duration: '1-2 Years', nextSteps: 'PhD, Teaching, Specialist Lawyer', topExams: 'CLAT PG, AILET PG', careerScope: 'Specialist Advocate, Law Professor, Judge', avgSalary: '6-25 LPA'},
-            'PhD': {fullName: 'Doctor of Philosophy', eligibility: 'PG with 55%+', duration: '3-5 Years', nextSteps: 'Post Doc, Professor, Scientist', topExams: 'UGC NET, GATE, CSIR NET', careerScope: 'Professor, Scientist in ISRO/DRDO, R&D Head', avgSalary: '8-30 LPA in academia. Industry: 15-50 LPA'},
-            'Post Doctoral': {fullName: 'Post Doctoral Research', eligibility: 'PhD', duration: '1-3 Years', nextSteps: 'Professor, Senior Scientist', topExams: 'NA', careerScope: 'Advanced research, International collaborations', avgSalary: '10-40 LPA'},
-            'Startup Founder': {fullName: 'Entrepreneur - Startup', eligibility: 'Any education + Idea', duration: 'NA', nextSteps: 'Scale up, Funding, IPO', topExams: 'NA', careerScope: 'Build own company, create jobs, innovation', avgSalary: 'Variable. Success: Crores. Initial: May be loss'},
-            'E-Commerce': {fullName: 'E-Commerce Business', eligibility: 'Any', duration: 'NA', nextSteps: 'Scale, Amazon/Flipkart Seller, Own Website', topExams: 'NA', careerScope: 'Online selling, Dropshipping, D2C brands', avgSalary: '2 LPA to Crores based on scale'},
-            'Retail Business': {fullName: 'Retail Shop', eligibility: 'Any', duration: 'NA', nextSteps: 'Chain of stores, Franchise', topExams: 'NA', careerScope: 'Supermarket, Kirana, Specialty store', avgSalary: '3-50 LPA based on size'},
-            'Franchise': {fullName: 'Franchise Business', eligibility: 'Investment capacity', duration: 'NA', nextSteps: 'Multiple franchises', topExams: 'NA', careerScope: 'McDonalds, Dominos, Any brand franchise', avgSalary: '5-50 LPA per outlet'},
-            'Food Business': {fullName: 'Restaurant/Cloud Kitchen', eligibility: 'Any', duration: 'NA', nextSteps: 'Chain of restaurants', topExams: 'NA', careerScope: 'Restaurant, Cafe, Cloud Kitchen, Catering', avgSalary: '3-100 LPA based on scale'},
-            'Digital Marketing Agency': {fullName: 'Digital Marketing Agency', eligibility: 'Any + Skills', duration: 'NA', nextSteps: 'Scale to 100+ clients', topExams: 'Google, Meta Certifications', careerScope: 'SEO, Social Media, Ads for clients', avgSalary: '5-100 LPA based on clients'},
-            'USA': {fullName: 'Study in United States', eligibility: '12th for UG, Degree for PG', duration: 'UG: 4 years, PG: 2 years', nextSteps: 'OPT, H1B, Green Card', topExams: 'SAT/ACT, GRE/GMAT, TOEFL/IELTS', careerScope: 'Tech, Finance, Research, Healthcare', avgSalary: 'After MS: $80k-150k'},
-            'Canada': {fullName: 'Study in Canada', eligibility: '12th for UG, Degree for PG', duration: 'UG: 4 years, PG: 1-2 years', nextSteps: 'PGWP, PR, Citizenship', topExams: 'IELTS, TOEFL', careerScope: 'IT, Healthcare, Engineering, PR easy', avgSalary: 'After PG: CAD 60k-100k'},
-            'UK': {fullName: 'Study in United Kingdom', eligibility: '12th for UG, Degree for PG', duration: 'UG: 3 years, PG: 1 year', nextSteps: 'Graduate Visa, Skilled Worker Visa', topExams: 'IELTS', careerScope: 'Finance, Law, Engineering, Healthcare', avgSalary: 'After PG: £30k-60k'},
-            'Australia': {fullName: 'Study in Australia', eligibility: '12th for UG, Degree for PG', duration: 'UG: 3 years, PG: 2 years', nextSteps: 'Post Study Work, PR', topExams: 'IELTS, PTE', careerScope: 'IT, Nursing, Engineering, PR friendly', avgSalary: 'After PG: AUD 60k-100k'},
-            'Germany': {fullName: 'Study in Germany', eligibility: '12th for UG, Degree for PG', duration: 'UG: 3 years, PG: 2 years', nextSteps: 'Job Seeker Visa, Blue Card', topExams: 'IELTS, TestDaF for German', careerScope: 'Engineering, Automobile, Research. Low/No tuition fee', avgSalary: 'After PG: €45k-70k'},
-            'France': {fullName: 'Study in France', eligibility: '12th for UG, Degree for PG', duration: 'UG: 3 years, PG: 2 years', nextSteps: 'APS, Job search visa', topExams: 'IELTS, TCF for French', careerScope: 'Luxury, Fashion, Engineering, Business', avgSalary: 'After PG: €35k-60k'},
-            'Software Engineer Abroad': {fullName: 'Software Engineer - International', eligibility: 'B.Tech + Experience', duration: 'NA', nextSteps: 'Senior, Architect, EM', topExams: 'Coding interviews', careerScope: 'FAANG: Google, Meta, Amazon, Microsoft', avgSalary: 'USA: $120k-300k. Canada: CAD 90k-180k'},
-            'Data Scientist Abroad': {fullName: 'Data Scientist - International', eligibility: 'MS/M.Tech + Skills', duration: 'NA', nextSteps: 'Senior DS, Head of Data', topExams: 'Case
+    </div>'BiPC': {fullName: 'Biology, Physics, Chemistry', eligibility: '10th Pass with 50%+ marks', duration: '2 Years
+    Intermediate', nextSteps: 'MBBS, BDS, BAMS, BHMS, Nursing, Pharmacy, Agriculture, Veterinary', topExams: 'NEET,
+    EAMCET, AIIMS', careerScope: 'Doctor, Dentist, Ayurveda, Homeopathy, Pharma, Research, Agriculture Officer',
+    avgSalary: 'MBBS Doctor: 6-50 LPA. Pharmacy: 3-8 LPA'},
+    'MEC': {fullName: 'Maths, Economics, Commerce', eligibility: '10th Pass', duration: '2 Years Intermediate',
+    nextSteps: 'B.Com, BBA, CA, CMA, CS, Economics, Banking', topExams: 'CUET, CA Foundation', careerScope: 'Accountant,
+    Banker, Business Analyst, Entrepreneur, Civil Services', avgSalary: 'After Degree: 3-12 LPA. After CA: 8-25 LPA'},
+    'CEC': {fullName: 'Civics, Economics, Commerce', eligibility: '10th Pass', duration: '2 Years Intermediate',
+    nextSteps: 'BA, B.Com, LLB, Civil Services, Journalism', topExams: 'CUET, CLAT', careerScope: 'Lawyer, Journalist,
+    Public Administration, Political Analyst, IAS/IPS', avgSalary: 'After Degree: 2.5-8 LPA. After LLB: 4-15 LPA'},
+    'HEC': {fullName: 'History, Economics, Civics', eligibility: '10th Pass', duration: '2 Years Intermediate',
+    nextSteps: 'BA, LLB, Civil Services, Archaeology, Teaching', topExams: 'CUET, CLAT, UPSC', careerScope: 'Historian,
+    Archaeologist, Teacher, Civil Services, Museum Curator', avgSalary: 'After Degree: 2.5-7 LPA'},
+    'Vocational': {fullName: 'Vocational Courses', eligibility: '10th Pass', duration: '1-2 Years', nextSteps: 'Direct
+    Job, Diploma, ITI Advanced Courses', topExams: 'State Level Vocational Exams', careerScope: 'Technician,
+    Electrician, Mechanic, Computer Operator', avgSalary: '2-5 LPA'},
+    'Diploma': {fullName: 'Polytechnic Diploma', eligibility: '10th Pass', duration: '3 Years', nextSteps: 'B.Tech
+    Lateral Entry to 2nd year, Government Jobs, Private Jobs', topExams: 'POLYCET, TS POLYCET', careerScope: 'Junior
+    Engineer, Technician, Supervisor in Govt and Private sectors', avgSalary: 'Diploma holder: 2.5-6 LPA. After B.Tech:
+    4-15 LPA'},
+    'ITI': {fullName: 'Industrial Training Institute', eligibility: '10th Pass', duration: '1-2 Years', nextSteps:
+    'Technician Jobs, Apprentice, Government Jobs', topExams: 'State ITI Entrance', careerScope: 'Electrician, Fitter,
+    Welder, Mechanic, COPA in Railways, PSUs', avgSalary: '2-4.5 LPA'},
+    'Open Schooling': {fullName: 'NIOS - National Institute of Open Schooling', eligibility: 'No age limit', duration:
+    'Flexible', nextSteps: 'Intermediate, Degree, Any course', topExams: 'NIOS Board Exams', careerScope: 'Same as
+    regular schooling. Flexible for working students', avgSalary: 'Depends on further education'},
+    'CSE': {fullName: 'Computer Science Engineering', eligibility:'MPC Intermediate with 60%+', duration:'4 Years
+    B.Tech', nextSteps: 'M.Tech, MS Abroad, MBA, Government Jobs', topExams: 'JEE Main, EAMCET, BITSAT', careerScope:
+    'Software Developer, AI Engineer, Data Scientist, Web Developer, IT Consultant', avgSalary: '6-40 LPA. Top
+    companies: 20-60 LPA'},
+    'AI & Data Science': {fullName: 'Artificial Intelligence & Data Science', eligibility: 'MPC Intermediate with 60%+',
+    duration: '4 Years B.Tech', nextSteps: 'M.Tech, MS, Research, Startups', topExams: 'JEE Main, GATE for PG',
+    careerScope: 'AI Engineer, ML Engineer, Data Scientist, Research Scientist', avgSalary: '12-40 LPA. High demand
+    globally'},
+    'IT': {fullName: 'Information Technology', eligibility: 'MPC Intermediate', duration: '4 Years B.Tech', nextSteps:
+    'M.Tech, MS, MBA, Jobs', topExams: 'JEE Main, EAMCET', careerScope: 'Software Engineer, System Admin, Network
+    Engineer, Cloud Engineer', avgSalary: '5-25 LPA'},
+    'ECE': {fullName: 'Electronics & Communication Engineering', eligibility: 'MPC Intermediate', duration: '4 Years
+    B.Tech', nextSteps: 'M.Tech, MS, Government Jobs, Core Jobs', topExams: 'JEE Main, GATE', careerScope: 'Electronics
+    Engineer, Telecom, VLSI, Embedded Systems, ISRO, DRDO', avgSalary: '4-20 LPA'},
+    'EEE': {fullName: 'Electrical & Electronics Engineering', eligibility: 'MPC Intermediate', duration: '4 Years
+    B.Tech', nextSteps: 'M.Tech, Government Jobs, PSU', topExams: 'JEE Main, GATE', careerScope: 'Electrical Engineer,
+    Power Sector, NTPC, Power Grid, Railways', avgSalary: '4-18 LPA'},
+    'Mechanical': {fullName: 'Mechanical Engineering', eligibility: 'MPC Intermediate', duration: '4 Years B.Tech',
+    nextSteps: 'M.Tech, MS, MBA, Government Jobs', topExams: 'JEE Main, GATE', careerScope: 'Design Engineer,
+    Production, Automobile, Manufacturing, PSUs', avgSalary: '3.5-15 LPA'},
+    'Civil': {fullName: 'Civil Engineering', eligibility: 'MPC Intermediate', duration: '4 Years B.Tech', nextSteps:
+    'M.Tech, Government Jobs, Construction', topExams: 'JEE Main, GATE', careerScope: 'Site Engineer, Structural
+    Engineer, PWD, CPWD, Private Construction', avgSalary: '3-12 LPA'},
+    'Aerospace': {fullName: 'Aerospace Engineering', eligibility: 'MPC Intermediate with 75%+', duration: '4 Years
+    B.Tech', nextSteps: 'M.Tech, MS, ISRO, DRDO, Airlines', topExams: 'JEE Advanced, IIST', careerScope: 'Aircraft
+    Design, ISRO, HAL, Boeing, Airbus, Research', avgSalary: '8-30 LPA'},
+    'MBBS': {fullName: 'Bachelor of Medicine & Bachelor of Surgery', eligibility: 'BiPC with 50%+, NEET Qualified',
+    duration: '5.5 Years including internship', nextSteps: 'MD/MS, DM/MCh, Practice, Government Doctor', topExams: 'NEET
+    UG, NEET PG', careerScope: 'General Physician, Surgeon, Specialist Doctor, Medical Officer', avgSalary: '6-50 LPA.
+    Specialists: 15-80 LPA'},
+    'BDS': {fullName: 'Bachelor of Dental Surgery', eligibility: 'BiPC with 50%+, NEET Qualified', duration: '5 Years
+    including internship', nextSteps: 'MDS, Private Clinic, Government Job', topExams: 'NEET UG', careerScope: 'Dentist,
+    Orthodontist, Oral Surgeon', avgSalary: '4-25 LPA'},
+    'BAMS': {fullName: 'Bachelor of Ayurvedic Medicine & Surgery', eligibility: 'BiPC, NEET Qualified', duration: '5.5
+    Years', nextSteps: 'MD Ayurveda, Practice, Government Job', topExams: 'NEET UG', careerScope: 'Ayurvedic Doctor,
+    Panchakarma Specialist', avgSalary: '3-15 LPA'},
+    'Nursing': {fullName: 'BSc Nursing', eligibility: 'BiPC with 45%+', duration: '4 Years', nextSteps: 'MSc Nursing,
+    Hospital Jobs, Abroad', topExams: 'NEET, State Nursing CET', careerScope: 'Staff Nurse, Nursing Officer, Abroad: UK,
+    Canada, Australia', avgSalary: '2.5-8 LPA. Abroad: 40-80 LPA'},
+    'Pharmacy': {fullName: 'Bachelor of Pharmacy', eligibility: 'BiPC or MPC', duration: '4 Years', nextSteps: 'M.Pharm,
+    Pharma Industry, Drug Inspector', topExams: 'EAMCET, GPAT for PG', careerScope: 'Pharmacist, Drug Inspector, Pharma
+    Companies, Research', avgSalary: '2.5-10 LPA'},
+    'Physiotherapy': {fullName: 'Bachelor of Physiotherapy', eligibility: 'BiPC', duration: '4.5 Years', nextSteps:
+    'MPT, Private Clinic, Hospitals', topExams: 'NEET, State CET', careerScope: 'Physiotherapist, Sports Physio,
+    Rehabilitation', avgSalary: '3-12 LPA'},
+    'B.Com': {fullName: 'Bachelor of Commerce', eligibility: 'MEC/CEC/HEC Intermediate', duration: '3 Years', nextSteps:
+    'M.Com, MBA, CA, CMA, CS, Banking', topExams: 'CUET, CA Foundation', careerScope: 'Accountant, Banker, Auditor, Tax
+    Consultant', avgSalary: '2.5-8 LPA'},
+    'BBA': {fullName: 'Bachelor of Business Administration', eligibility: 'Any stream Intermediate', duration: '3
+    Years', nextSteps: 'MBA, Jobs, Start own business', topExams: 'CUET, IPMAT', careerScope: 'Manager, HR, Marketing,
+    Operations, Entrepreneur', avgSalary: '3-12 LPA'},
+    'CA': {fullName: 'Chartered Accountant', eligibility: '12th Pass, CA Foundation', duration: '4-5 Years', nextSteps:
+    'Practice, Job in MNCs, Banks, Audit Firms', topExams: 'CA Foundation, Inter, Final', careerScope: 'Auditor, Tax
+    Consultant, CFO, Financial Analyst', avgSalary: '8-25 LPA. Partners: 30-80 LPA'},
+    'CMA': {fullName: 'Cost & Management Accountant', eligibility: '12th Pass', duration: '3-4 Years', nextSteps:
+    'Practice, Cost Audit, Industry Jobs', topExams: 'CMA Foundation, Inter, Final', careerScope: 'Cost Auditor,
+    Management Accountant, CFO', avgSalary: '7-20 LPA'},
+    'CS': {fullName: 'Company Secretary', eligibility: '12th Pass', duration: '3-4 Years', nextSteps: 'Practice,
+    Corporate Jobs', topExams: 'CSEET, Executive, Professional', careerScope: 'Company Secretary, Legal Compliance,
+    Corporate Governance', avgSalary: '6-18 LPA'},
+    'BA LLB': {fullName: 'Bachelor of Arts + Bachelor of Law', eligibility: 'Any stream Intermediate', duration: '5
+    Years', nextSteps: 'LLM, Practice, Judiciary, Corporate Law', topExams: 'CLAT, AILET, LSAT', careerScope: 'Advocate,
+    Judge, Legal Advisor, Corporate Lawyer', avgSalary: '4-20 LPA. Senior Lawyers: 50+ LPA'},
+    'BHM': {fullName: 'Bachelor of Hotel Management', eligibility: 'Any stream Intermediate', duration: '4 Years',
+    nextSteps: 'MHM, Hotel Industry, Cruise, Airlines', topExams: 'NCHMCT JEE', careerScope: 'Hotel Manager, Chef, F&B
+    Manager, Cruise Line', avgSalary: '3-15 LPA'},
+    'Pilot Training': {fullName: 'Commercial Pilot License', eligibility: 'MPC with 50%+, Medical Fit', duration: '18-24
+    Months', nextSteps: 'Airline Pilot, Charter Pilot', topExams: 'DGCA Exams', careerScope: 'Airline Pilot: Indigo, Air
+    India, Vistara, International', avgSalary: '15-80 LPA. Captain: 50-120 LPA'},
+    'Fashion Design': {fullName: 'Bachelor of Design - Fashion', eligibility: 'Any stream Intermediate', duration: '4
+    Years', nextSteps: 'M.Des, Own Label, Fashion Houses', topExams: 'NIFT, NID, UCEED', careerScope: 'Fashion Designer,
+    Stylist, Merchandiser, Boutique Owner', avgSalary: '3-20 LPA'},
+    'IAS': {fullName: 'Indian Administrative Service', eligibility: 'Any Degree, Age 21-32 years', duration: 'Training:
+    2 Years at LBSNAA', nextSteps: 'District Collector, Secretary, Cabinet Secretary', topExams: 'UPSC Civil Services
+    Exam - Prelims, Mains, Interview', careerScope: 'Top administrative post in India. Policy making, district
+    administration, governance', avgSalary: 'Starting: 56,100 per month. Cabinet Secretary: 2,50,000 per month +
+    perks'},
+    'IPS': {fullName: 'Indian Police Service', eligibility: 'Any Degree, Age 21-32 years', duration: 'Training: 2 Years
+    at SVPNPA', nextSteps: 'SP, DIG, IG, DGP', topExams: 'UPSC Civil Services Exam', careerScope: 'Law and order, crime
+    investigation, intelligence, security', avgSalary: 'Starting: 56,100 per month. DGP: 2,25,000 per month + perks'},
+    'IFS': {fullName: 'Indian Foreign Service', eligibility: 'Any Degree, Age 21-32 years', duration: 'Training: 3
+    Years', nextSteps: 'Ambassador, High Commissioner, MEA Secretary', topExams: 'UPSC Civil Services Exam',
+    careerScope: 'Diplomacy, International Relations, Embassy Postings', avgSalary: 'Starting: 56,100 per month +
+    foreign allowance'},
+    'IRS': {fullName: 'Indian Revenue Service', eligibility: 'Any Degree, Age 21-32 years', duration: 'Training: 16
+    months', nextSteps: 'Income Tax Commissioner, Customs Commissioner', topExams: 'UPSC Civil Services Exam',
+    careerScope: 'Tax Administration, Customs, GST, Enforcement', avgSalary: 'Starting: 56,100 per month + perks'},
+    'SBI PO': {fullName: 'State Bank of India Probationary Officer', eligibility: 'Any Degree, Age 21-30 years',
+    duration: 'Training: 2 Years probation', nextSteps: 'Assistant Manager, Branch Manager, AGM, GM', topExams: 'SBI PO
+    Exam - Prelims, Mains, GD, Interview', careerScope: 'Banking operations, loans, customer service, branch
+    management', avgSalary: 'Starting: 41,960 per month + allowances. Total CTC: 8-13 LPA'},
+    'IBPS PO': {fullName: 'Institute of Banking Personnel Selection PO', eligibility: 'Any Degree, Age 20-30 years',
+    duration: 'Training: 2 Years probation', nextSteps: 'Assistant Manager, Manager, Senior Manager in PSU Banks',
+    topExams: 'IBPS PO - Prelims, Mains, Interview', careerScope: 'Public Sector Banks: PNB, BOB, Canara Bank, Union
+    Bank', avgSalary: 'Starting: 36,000 per month. Total CTC: 7-10 LPA'},
+    'RBI': {fullName: 'Reserve Bank of India', eligibility: 'Graduate for Assistant, PG for Grade B', duration:
+    'Training: 6 months', nextSteps: 'Assistant, Grade B Officer, GM', topExams: 'RBI Grade B, RBI Assistant',
+    careerScope: 'Central Bank, Monetary Policy, Banking Regulation', avgSalary: 'Grade B: 77,000 per month. Total CTC:
+    15-20 LPA'},
+    'NABARD': {fullName: 'National Bank for Agriculture & Rural Development', eligibility: 'Graduate, Age 21-30',
+    duration: 'Training: 6 months', nextSteps: 'Development Assistant, Grade A Officer', topExams: 'NABARD Grade A/B',
+    careerScope: 'Rural Development, Agriculture Finance, Policy', avgSalary: 'Grade A: 44,500 per month. Total CTC:
+    10-15 LPA'},
+    'SSC CGL': {fullName: 'Staff Selection Commission Combined Graduate Level', eligibility: 'Any Degree, Age 18-32
+    years', duration: 'NA', nextSteps: 'Income Tax Inspector, Assistant Section Officer, Auditor, Accountant', topExams:
+    'SSC CGL - Tier 1, Tier 2, Tier 3, Tier 4', careerScope: 'Central Govt departments: Income Tax, CBI, MEA, Railways,
+    Postal', avgSalary: 'Level 6-8: 35,400 to 1,12,400 per month + DA, HRA'},
+    'SSC CHSL': {fullName: 'Combined Higher Secondary Level', eligibility: '12th Pass, Age 18-27 years', duration: 'NA',
+    nextSteps: 'LDC, DEO, Postal Assistant', topExams: 'SSC CHSL - Tier 1, Tier 2, Typing Test', careerScope: 'Clerical
+    jobs in Central Govt departments', avgSalary: 'Level 2-4: 19,900 to 63,200 per month'},
+    'SSC MTS': {fullName: 'Multi Tasking Staff', eligibility: '10th Pass, Age 18-25 years', duration: 'NA', nextSteps:
+    'Peon, Daftary, Jamadar', topExams: 'SSC MTS - Paper 1, Paper 2', careerScope: 'Group C non-technical posts in
+    Central Govt', avgSalary: 'Level 1: 18,000 to 56,900 per month'},
+    'SSC GD': {fullName: 'General Duty Constable', eligibility: '10th Pass, Age 18-23 years', duration: 'Training: 6
+    months', nextSteps: 'Constable, Head Constable', topExams: 'SSC GD - CBE, PET, PST, Medical', careerScope: 'CAPF:
+    BSF, CRPF, CISF, ITBP, SSB', avgSalary: 'Level 3: 21,700 to 69,100 per month'},
+    'RRB NTPC': {fullName: 'Railway Recruitment Board Non-Technical Popular Categories', eligibility: '12th Pass or
+    Graduate, Age 18-33 years', duration: 'Training: 6 months to 1 year', nextSteps: 'Station Master, Goods Guard,
+    Clerk, Ticket Collector', topExams: 'RRB NTPC - CBT 1, CBT 2, Typing Test, Document Verification', careerScope:
+    'Indian Railways - largest employer. Job security, pension, medical', avgSalary: 'Level 2-6: 19,900 to 35,400 per
+    month + allowances'},
+    'RRB Group D': {fullName: 'Railway Group D', eligibility: '10th Pass, Age 18-33 years', duration: 'Training: 3
+    months', nextSteps: 'Track Maintainer, Helper, Assistant', topExams: 'RRB Group D - CBT, PET, Medical', careerScope:
+    'Track maintenance, workshop, signal, electrical', avgSalary: 'Level 1: 18,000 to 56,900 per month'},
+    'RRB JE': {fullName: 'Junior Engineer', eligibility: 'Diploma or B.Tech, Age 18-33 years', duration: 'Training: 6
+    months', nextSteps: 'Senior Section Engineer, SSE', topExams: 'RRB JE - CBT 1, CBT 2, Document Verification',
+    careerScope: 'Civil, Mechanical, Electrical, S&T in Railways', avgSalary: 'Level 6: 35,400 to 1,12,400 per month'},
+    'RRB ALP': {fullName: 'Assistant Loco Pilot', eligibility: '10th + ITI or Diploma in Engineering, Age 18-30 years',
+    duration: 'Training: 1 Year', nextSteps: 'Loco Pilot, Senior Loco Pilot, Loco Inspector', topExams: 'RRB ALP - CBT
+    1, CBT 2, CBAT, Document Verification', careerScope: 'Drive trains, responsible for passenger safety, technical
+    job', avgSalary: 'Level 2: 19,900 per month + running allowance 15,000-25,000. Total: 45,000-60,000 per month'},
+    'Indian Army': {fullName: 'Indian Army', eligibility: '10th/12th/Graduate based on entry', duration: 'Training: 6
+    months to 1.5 years', nextSteps: 'Soldier, JCO, Officer through NDA/CDS/AFCAT', topExams: 'Agniveer, NDA, CDS,
+    AFCAT, TES', careerScope: 'Defend nation, disaster relief, UN peacekeeping, adventure', avgSalary: 'Agniveer: 30,000
+    per month. Officer: 56,100 per month + MSP + allowances'},
+    'Indian Navy': {fullName: 'Indian Navy', eligibility: '10th/12th/B.Tech based on entry', duration: 'Training: 6
+    months to 4 years', nextSteps: 'Sailor, Officer through NDA/CDS/INET', topExams: 'Agniveer, NDA, CDS, INET',
+    careerScope: 'Naval operations, submarine, aviation, marine engineering', avgSalary: 'Sailor: 21,700 per month.
+    Officer: 56,100 per month + allowances'},
+    'Indian Air Force': {fullName: 'Indian Air Force', eligibility: '10th/12th/Graduate based on entry', duration:
+    'Training: 6 months to 1.5 years', nextSteps: 'Airman, Officer through NDA/CDS/AFCAT', topExams: 'Agniveer, NDA,
+    CDS, AFCAT', careerScope: 'Pilot, Engineer, Ground Duty, Air Traffic Control', avgSalary: 'Airman: 26,900 per month.
+    Officer: 56,100 per month + allowances'},
+    'Coast Guard': {fullName: 'Indian Coast Guard', eligibility: '10th/12th/Graduate', duration: 'Training: 6 months',
+    nextSteps: 'Navik, Yantrik, Assistant Commandant', topExams: 'ICG Navik, ICG Yantrik, AC', careerScope: 'Maritime
+    security, search and rescue, pollution control', avgSalary: 'Navik: 21,700 per month. AC: 56,100 per month'},
+    'Software Development': {fullName: 'Software Developer', eligibility: 'B.Tech/BCA/MCA or equivalent skills',
+    duration: 'NA', nextSteps: 'Senior Developer, Tech Lead, Architect, CTO', topExams: 'Company specific coding tests',
+    careerScope: 'Build applications, websites, software products in IT companies', avgSalary: '6-30 LPA. MNCs: 15-60
+    LPA'},
+    'Artificial Intelligence': {fullName: 'AI/ML Engineer', eligibility: 'B.Tech/M.Tech in CS/IT/Data Science',
+    duration: 'NA', nextSteps: 'Senior AI Engineer, Research Scientist, AI Architect', topExams: 'GATE, Company tests',
+    careerScope: 'Build AI models, ChatGPT, Self-driving cars, Recommendation systems', avgSalary: '12-40 LPA. Top:
+    50-100 LPA'},
+    'Data Science': {fullName: 'Data Scientist', eligibility: 'B.Tech/B.Sc Stats/Maths/MCA', duration: 'NA', nextSteps:
+    'Senior Data Scientist, Head of Data, CDO', topExams: 'Company tests', careerScope: 'Analyze data, build ML models,
+    business insights', avgSalary: '8-30 LPA'},
+    'Cyber Security': {fullName: 'Cyber Security Analyst', eligibility: 'B.Tech/BCA with certifications', duration:
+    'NA', nextSteps: 'Ethical Hacker, Security Architect, CISO', topExams: 'CEH, CISSP, CompTIA', careerScope: 'Protect
+    systems, ethical hacking, security audit', avgSalary: '8-25 LPA'},
+    'Cloud Computing': {fullName: 'Cloud Engineer', eligibility: 'B.Tech/BCA + AWS/Azure/GCP', duration: 'NA',
+    nextSteps: 'Cloud Architect, DevOps Engineer', topExams: 'AWS, Azure Certifications', careerScope: 'AWS, Azure,
+    Google Cloud infrastructure', avgSalary: '10-30 LPA'},
+    'Healthcare': {fullName: 'Healthcare Professional', eligibility: 'MBBS/BDS/BAMS/Nursing/Pharmacy', duration:
+    'Varies', nextSteps: 'Specialization, Own Clinic, Hospital Admin', topExams: 'NEET PG, Hospital tests', careerScope:
+    'Doctor, Nurse, Pharmacist in hospitals, clinics', avgSalary: '3-50 LPA based on specialization'},
+    'Finance': {fullName: 'Finance Professional', eligibility: 'B.Com/MBA/CA/CFA', duration: 'NA', nextSteps: 'Senior
+    Analyst, Manager, CFO', topExams: 'CFA, FRM', careerScope: 'Investment Banking, Corporate Finance, Equity Research',
+    avgSalary: '6-40 LPA'},
+    'Marketing': {fullName: 'Marketing Professional', eligibility: 'BBA/MBA', duration: 'NA', nextSteps: 'Brand Manager,
+    Marketing Head, CMO', topExams: 'CAT, Company tests', careerScope: 'Digital Marketing, Brand Management, Sales,
+    Advertising', avgSalary: '4-25 LPA'},
+    'Sales': {fullName: 'Sales Executive/Manager', eligibility: 'Any Degree', duration: 'NA', nextSteps: 'Sales Manager,
+    Regional Manager, VP Sales', topExams: 'Company tests', careerScope: 'B2B, B2C Sales, Business Development',
+    avgSalary: '3-20 LPA + incentives'},
+    'CFA': {fullName: 'Chartered Financial Analyst', eligibility: 'Graduate', duration: '2-3 Years', nextSteps:
+    'Investment Banking, Portfolio Management', topExams: 'CFA Level 1, 2, 3', careerScope: 'Equity Research, Investment
+    Banking, Asset Management', avgSalary: '12-40 LPA'},
+    'ACCA': {fullName: 'Association of Chartered Certified Accountants', eligibility: '12th Pass', duration: '3 Years',
+    nextSteps: 'Global Accounting Jobs, MNCs', topExams: 'ACCA 13 papers', careerScope: 'Global accountant, Big 4:
+    Deloitte, EY, KPMG, PwC', avgSalary: '8-25 LPA'},
+    'B.Tech': {fullName: 'Bachelor of Technology', eligibility: 'MPC Intermediate', duration: '4 Years', nextSteps:
+    'M.Tech, MS, MBA, Jobs, UPSC', topExams: 'JEE Main, EAMCET', careerScope: 'Engineer in IT, Core, PSU, Government',
+    avgSalary: '4-30 LPA'},
+    'B.Sc': {fullName: 'Bachelor of Science', eligibility: 'MPC/BiPC Intermediate', duration: '3 Years', nextSteps:
+    'M.Sc, B.Ed, Government Jobs', topExams: 'CUET', careerScope: 'Teacher, Research, Lab Technician, IT', avgSalary:
+    '2.5-8 LPA'},
+    'BA': {fullName: 'Bachelor of Arts', eligibility: 'Any stream Intermediate', duration: '3 Years', nextSteps: 'MA,
+    B.Ed, LLB, UPSC', topExams: 'CUET', careerScope: 'Teacher, Civil Services, Journalism, Social Work', avgSalary: '2-6
+    LPA'},
+    'BCA': {fullName: 'Bachelor of Computer Applications', eligibility: 'Any stream with Maths', duration: '3 Years',
+    nextSteps: 'MCA, IT Jobs', topExams: 'CUET', careerScope: 'Software Developer, Web Developer, IT Support',
+    avgSalary: '2.5-10 LPA'},
+    'LLB': {fullName: 'Bachelor of Law', eligibility: 'Any Degree', duration: '3 Years', nextSteps: 'LLM, Practice,
+    Judiciary', topExams: 'CLAT PG, AILET PG', careerScope: 'Advocate, Legal Advisor, Judge', avgSalary: '3-15 LPA'},
+    'M.Tech': {fullName: 'Master of Technology', eligibility: 'B.Tech + GATE', duration: '2 Years', nextSteps: 'PhD,
+    Research, Senior Engineer, Teaching', topExams: 'GATE', careerScope: 'Specialist Engineer, R&D, Professor, PSU',
+    avgSalary: '8-25 LPA'},
+    'MBA': {fullName: 'Master of Business Administration', eligibility: 'Any Degree + CAT/MAT', duration: '2 Years',
+    nextSteps: 'Manager, Consultant, Entrepreneur', topExams: 'CAT, XAT, GMAT', careerScope: 'Management roles in all
+    sectors, Consulting, Banking', avgSalary: '8-40 LPA. IIMs: 20-60 LPA'},
+    'MCA': {fullName: 'Master of Computer Applications', eligibility: 'BCA/B.Sc Maths + NIMCET', duration: '2 Years',
+    nextSteps: 'IT Jobs, Teaching', topExams: 'NIMCET, CUET PG', careerScope: 'Software Developer, System Analyst, IT
+    Manager', avgSalary: '4-15 LPA'},
+    'M.Sc': {fullName: 'Master of Science', eligibility: 'B.Sc', duration: '2 Years', nextSteps: 'PhD, Research,
+    Teaching, Industry', topExams: 'CUET PG, IIT JAM', careerScope: 'Scientist, Researcher, Professor, Lab Manager',
+    avgSalary: '3-12 LPA'},
+    'MA': {fullName: 'Master of Arts', eligibility: 'BA', duration: '2 Years', nextSteps: 'PhD, Teaching, Civil
+    Services', topExams: 'CUET PG', careerScope: 'Professor, Researcher, Writer, Civil Services', avgSalary: '2.5-10
+    LPA'},
+    'M.Com': {fullName: 'Master of Commerce', eligibility: 'B.Com', duration: '2 Years', nextSteps: 'PhD, Teaching, CA,
+    Banking', topExams: 'CUET PG', careerScope: 'Professor, Accountant, Financial Analyst', avgSalary: '3-12 LPA'},
+    'LLM': {fullName: 'Master of Law', eligibility: 'LLB', duration: '1-2 Years', nextSteps: 'PhD, Teaching, Specialist
+    Lawyer', topExams: 'CLAT PG, AILET PG', careerScope: 'Specialist Advocate, Law Professor, Judge', avgSalary: '6-25
+    LPA'},
+    'PhD': {fullName: 'Doctor of Philosophy', eligibility: 'PG with 55%+', duration: '3-5 Years', nextSteps: 'Post Doc,
+    Professor, Scientist', topExams: 'UGC NET, GATE, CSIR NET', careerScope: 'Professor, Scientist in ISRO/DRDO, R&D
+    Head', avgSalary: '8-30 LPA in academia. Industry: 15-50 LPA'},
+    'Post Doctoral': {fullName: 'Post Doctoral Research', eligibility: 'PhD', duration: '1-3 Years', nextSteps:
+    'Professor, Senior Scientist', topExams: 'NA', careerScope: 'Advanced research, International collaborations',
+    avgSalary: '10-40 LPA'},
+    'Startup Founder': {fullName: 'Entrepreneur - Startup', eligibility: 'Any education + Idea', duration: 'NA',
+    nextSteps: 'Scale up, Funding, IPO', topExams: 'NA', careerScope: 'Build own company, create jobs, innovation',
+    avgSalary: 'Variable. Success: Crores. Initial: May be loss'},
+    'E-Commerce': {fullName: 'E-Commerce Business', eligibility: 'Any', duration: 'NA', nextSteps: 'Scale,
+    Amazon/Flipkart Seller, Own Website', topExams: 'NA', careerScope: 'Online selling, Dropshipping, D2C brands',
+    avgSalary: '2 LPA to Crores based on scale'},
+    'Retail Business': {fullName: 'Retail Shop', eligibility: 'Any', duration: 'NA', nextSteps: 'Chain of stores,
+    Franchise', topExams: 'NA', careerScope: 'Supermarket, Kirana, Specialty store', avgSalary: '3-50 LPA based on
+    size'},
+    'Franchise': {fullName: 'Franchise Business', eligibility: 'Investment capacity', duration: 'NA', nextSteps:
+    'Multiple franchises', topExams: 'NA', careerScope: 'McDonalds, Dominos, Any brand franchise', avgSalary: '5-50 LPA
+    per outlet'},
+    'Food Business': {fullName: 'Restaurant/Cloud Kitchen', eligibility: 'Any', duration: 'NA', nextSteps: 'Chain of
+    restaurants', topExams: 'NA', careerScope: 'Restaurant, Cafe, Cloud Kitchen, Catering', avgSalary: '3-100 LPA based
+    on scale'},
+    'Digital Marketing Agency': {fullName: 'Digital Marketing Agency', eligibility: 'Any + Skills', duration: 'NA',
+    nextSteps: 'Scale to 100+ clients', topExams: 'Google, Meta Certifications', careerScope: 'SEO, Social Media, Ads
+    for clients', avgSalary: '5-100 LPA based on clients'},
+    'USA': {fullName: 'Study in United States', eligibility: '12th for UG, Degree for PG', duration: 'UG: 4 years, PG: 2
+    years', nextSteps: 'OPT, H1B, Green Card', topExams: 'SAT/ACT, GRE/GMAT, TOEFL/IELTS', careerScope: 'Tech, Finance,
+    Research, Healthcare', avgSalary: 'After MS: $80k-150k'},
+    'Canada': {fullName: 'Study in Canada', eligibility: '12th for UG, Degree for PG', duration: 'UG: 4 years, PG: 1-2
+    years', nextSteps: 'PGWP, PR, Citizenship', topExams: 'IELTS, TOEFL', careerScope: 'IT, Healthcare, Engineering, PR
+    easy', avgSalary: 'After PG: CAD 60k-100k'},
+    'UK': {fullName: 'Study in United Kingdom', eligibility: '12th for UG, Degree for PG', duration: 'UG: 3 years, PG: 1
+    year', nextSteps: 'Graduate Visa, Skilled Worker Visa', topExams: 'IELTS', careerScope: 'Finance, Law, Engineering,
+    Healthcare', avgSalary: 'After PG: £30k-60k'},
+    'Australia': {fullName: 'Study in Australia', eligibility: '12th for UG, Degree for PG', duration: 'UG: 3 years, PG:
+    2 years', nextSteps: 'Post Study Work, PR', topExams: 'IELTS, PTE', careerScope: 'IT, Nursing, Engineering, PR
+    friendly', avgSalary: 'After PG: AUD 60k-100k'},
+    'Germany': {fullName: 'Study in Germany', eligibility: '12th for UG, Degree for PG', duration: 'UG: 3 years, PG: 2
+    years', nextSteps: 'Job Seeker Visa, Blue Card', topExams: 'IELTS, TestDaF for German', careerScope: 'Engineering,
+    Automobile, Research. Low/No tuition fee', avgSalary: 'After PG: €45k-70k'},
+    'France': {fullName: 'Study in France', eligibility: '12th for UG, Degree for PG', duration: 'UG: 3 years, PG: 2
+    years', nextSteps: 'APS, Job search visa', topExams: 'IELTS, TCF for French', careerScope: 'Luxury, Fashion,
+    Engineering, Business', avgSalary: 'After PG: €35k-60k'},
+    'Software Engineer Abroad': {fullName: 'Software Engineer - International', eligibility: 'B.Tech + Experience',
+    duration: 'NA', nextSteps: 'Senior, Architect, EM', topExams: 'Coding interviews', careerScope: 'FAANG: Google,
+    Meta, Amazon, Microsoft', avgSalary: 'USA: $120k-300k. Canada: CAD 90k-180k'},
+    'Data Scientist Abroad': {fullName: 'Data Scientist - International', eligibility: 'MS/M.Tech + Skills', duration:
+    'NA', nextSteps: 'Senior DS, Head of Data', topExams: 'Case
 
     <script>
         const careerData = {
-            'MPC': {fullName: 'Maths, Physics, Chemistry', eligibility: '10th Pass with 55%+ marks', duration: '2 Years Intermediate', nextSteps: 'B.Tech, B.E, B.Sc, BCA, NDA, Aviation, Merchant Navy', topExams: 'JEE Main, JEE Advanced, EAMCET, BITSAT', careerScope: 'Engineering, IT, Software, Civil Services, Defence, Scientist', avgSalary: 'After B.Tech: 4-30 LPA depending on college and branch'},
-'Data Scientist Abroad': {fullName: 'Data Scientist - International', eligibility: 'MS/M.Tech + Skills', duration: 'NA', nextSteps: 'Senior DS, Head of Data', topExams: 'Case studies, Coding', careerScope: 'Tech, Finance, Healthcare companies', avgSalary: 'USA: $130k-250k'},
-            'Doctor Abroad': {fullName: 'Medical Doctor - International', eligibility: 'MBBS + USMLE/PLAB/MCCQE', duration: 'Varies', nextSteps: 'Residency, Specialization', topExams: 'USMLE, PLAB, MCCQE', careerScope: 'Physician, Surgeon in USA, UK, Canada', avgSalary: 'USA: $200k-400k. UK: £80k-150k'},
-            'Nurse Abroad': {fullName: 'Registered Nurse - International', eligibility: 'BSc Nursing + NCLEX/IELTS', duration: 'NA', nextSteps: 'Specialist Nurse, NP', topExams: 'NCLEX, IELTS', careerScope: 'Hospitals in USA, UK, Canada, Australia', avgSalary: 'USA: $70k-110k. UK: £30k-50k'},
-            'JEE Main': {fullName: 'Joint Entrance Examination Main', eligibility: '12th Pass with PCM', duration: 'NA', nextSteps: 'JEE Advanced, B.Tech Admission', topExams: 'JEE Main', careerScope: 'Entry to NITs, IIITs, GFTIs', avgSalary: 'NA'},
-            'NEET': {fullName: 'National Eligibility cum Entrance Test', eligibility: '12th Pass with PCB', duration: 'NA', nextSteps: 'MBBS, BDS, BAMS, BHMS Admission', topExams: 'NEET', careerScope: 'Entry to Medical Colleges', avgSalary: 'NA'},
-            'CLAT': {fullName: 'Common Law Admission Test', eligibility: '12th Pass for UG, LLB for PG', duration: 'NA', nextSteps: 'NLU Admission, Law Colleges', topExams: 'CLAT', careerScope: 'Entry to National Law Universities', avgSalary: 'NA'},
-            'CUET': {fullName: 'Common University Entrance Test', eligibility: '12th Pass for UG, Graduate for PG', duration: 'NA', nextSteps: 'Central University Admission', topExams: 'CUET', careerScope: 'Entry to Central Universities', avgSalary: 'NA'}
-        };
+            // Streams After 10th
+            'MPC': { fullName: 'Maths, Physics, Chemistry', eligibility: '10th Pass with 55%+ marks', duration: '2 Years Intermediate', nextSteps: 'B.Tech, B.E, B.Sc, BCA, NDA, Aviation, Merchant Navy', topExams: 'JEE Main, JEE Advanced, EAMCET, BITSAT', careerScope: 'Engineering, IT, Software, Civil Services, Defence, Scientist', avgSalary: 'After B.Tech: 4-30 LPA depending on college and branch' },
+            'BiPC': { fullName: 'Biology, Physics, Chemistry', eligibility: '10th Pass with 50%+ marks', duration: '2 Years Intermediate', nextSteps: 'MBBS, BDS, BAMS, BHMS, Nursing, Pharmacy, Agriculture, Veterinary', topExams: 'NEET, EAMCET, AIIMS', careerScope: 'Doctor, Dentist, Ayurveda, Homeopathy, Pharma, Research, Agriculture Officer', avgSalary: 'MBBS Doctor: 6-50 LPA. Pharmacy: 3-8 LPA' },
+            'MEC': { fullName: 'Maths, Economics, Commerce', eligibility: '10th Pass', duration: '2 Years Intermediate', nextSteps: 'B.Com, BBA, CA, CMA, CS, Economics, Banking', topExams: 'CUET, CA Foundation', careerScope: 'Accountant, Banker, Business Analyst, Entrepreneur, Civil Services', avgSalary: 'After Degree: 3-12 LPA. After CA: 8-25 LPA' },
+            'CEC': { fullName: 'Civics, Economics, Commerce', eligibility: '10th Pass', duration: '2 Years Intermediate', nextSteps: 'BA, B.Com, LLB, Civil Services, Journalism', topExams: 'CUET, CLAT', careerScope: 'Lawyer, Journalist, Public Administration, Political Analyst, IAS/IPS', avgSalary: 'After Degree: 2.5-8 LPA. After LLB: 4-15 LPA' },
+            'HEC': { fullName: 'History, Economics, Civics', eligibility: '10th Pass', duration: '2 Years Intermediate', nextSteps: 'BA, LLB, Civil Services, Archaeology, Teaching', topExams: 'CUET, CLAT, UPSC', careerScope: 'Historian, Archaeologist, Teacher, Civil Services, Museum Curator', avgSalary: 'After Degree: 2.5-7 LPA' },
+            'Vocational': { fullName: 'Vocational Courses', eligibility: '10th Pass', duration: '1-2 Years', nextSteps: 'Direct Job, Diploma, ITI Advanced Courses', topExams: 'State Level Vocational Exams', careerScope: 'Technician, Electrician, Mechanic, Computer Operator', avgSalary: '2-5 LPA' },
+            'Diploma': { fullName: 'Polytechnic Diploma', eligibility: '10th Pass', duration: '3 Years', nextSteps: 'B.Tech Lateral Entry to 2nd year, Government Jobs, Private Jobs', topExams: 'POLYCET, TS POLYCET', careerScope: 'Junior Engineer, Technician, Supervisor in Govt and Private sectors', avgSalary: 'Diploma holder: 2.5-6 LPA. After B.Tech: 4-15 LPA' },
+            'ITI': { fullName: 'Industrial Training Institute', eligibility: '10th Pass', duration: '1-2 Years', nextSteps: 'Technician Jobs, Apprentice, Government Jobs', topExams: 'State ITI Entrance', careerScope: 'Electrician, Fitter, Welder, Mechanic, COPA in Railways, PSUs', avgSalary: '2-4.5 LPA' },
+            'Open Schooling': { fullName: 'NIOS - National Institute of Open Schooling', eligibility: 'No age limit', duration: 'Flexible', nextSteps: 'Intermediate, Degree, Any course', topExams: 'NIOS Board Exams', careerScope: 'Same as regular schooling. Flexible for working students', avgSalary: 'Depends on further education' },
 
+            // Streams After Intermediate - Engineering & Technology
+            'CSE': { fullName: 'Computer Science Engineering', eligibility: 'MPC Intermediate with 60%+', duration: '4 Years B.Tech', nextSteps: 'M.Tech, MS Abroad, MBA, Government Jobs, Startups', topExams: 'JEE Main, EAMCET, BITSAT, VITEEE', careerScope: 'Software Developer, AI Engineer, Data Scientist, Web Developer, IT Consultant, Cybersecurity Expert', avgSalary: '6-40 LPA. Top companies IIT/NIT: 20-60 LPA' },
+            'AI & Data Science': { fullName: 'Artificial Intelligence & Data Science', eligibility: 'MPC Intermediate with 60%+', duration: '4 Years B.Tech', nextSteps: 'M.Tech, MS, Research, AI Startups', topExams: 'JEE Main, GATE for PG', careerScope: 'AI Engineer, ML Engineer, Data Scientist, Research Scientist, NLP Engineer', avgSalary: '12-40 LPA. High global demand' },
+            'IT': { fullName: 'Information Technology', eligibility: 'MPC Intermediate with 55%+', duration: '4 Years B.Tech', nextSteps: 'M.Tech, MS, MBA, Certifications', topExams: 'JEE Main, EAMCET', careerScope: 'Software Engineer, System Admin, Network Engineer, Cloud Engineer, DevOps', avgSalary: '5-25 LPA' },
+            'ECE': { fullName: 'Electronics & Communication Engineering', eligibility: 'MPC Intermediate with 55%+', duration: '4 Years B.Tech', nextSteps: 'M.Tech, MS, Government Jobs, Core Jobs', topExams: 'JEE Main, GATE, IES', careerScope: 'Electronics Engineer, Telecom, VLSI Design, Embedded Systems, ISRO, DRDO, BSNL', avgSalary: '4-20 LPA' },
+            'EEE': { fullName: 'Electrical & Electronics Engineering', eligibility: 'MPC Intermediate with 55%+', duration: '4 Years B.Tech', nextSteps: 'M.Tech, Government Jobs, PSU', topExams: 'JEE Main, GATE, IES', careerScope: 'Electrical Engineer, Power Sector, NTPC, Power Grid, Railways, BHEL', avgSalary: '4-18 LPA' },
+            'Mechanical': { fullName: 'Mechanical Engineering', eligibility: 'MPC Intermediate with 55%+', duration: '4 Years B.Tech', nextSteps: 'M.Tech, MS, MBA, Government Jobs', topExams: 'JEE Main, GATE, IES', careerScope: 'Design Engineer, Production, Automobile, Manufacturing, PSUs, Defence', avgSalary: '3.5-15 LPA' },
+            'Civil': { fullName: 'Civil Engineering', eligibility: 'MPC Intermediate with 55%+', duration: '4 Years B.Tech', nextSteps: 'M.Tech, Government Jobs, Construction', topExams: 'JEE Main, GATE, IES', careerScope: 'Site Engineer, Structural Engineer, PWD, CPWD, L&T, Private Construction, Real Estate', avgSalary: '3-12 LPA' },
+            'Aerospace': { fullName: 'Aerospace Engineering', eligibility: 'MPC Intermediate with 75%+', duration: '4 Years B.Tech', nextSteps: 'M.Tech, MS, ISRO, DRDO, Airlines', topExams: 'JEE Advanced, IIST Admission', careerScope: 'Aircraft Design, ISRO, HAL, Boeing, Airbus, Defence Research', avgSalary: '8-30 LPA' },
+
+            // Medical & Health Sciences
+            'MBBS': { fullName: 'Bachelor of Medicine & Bachelor of Surgery', eligibility: 'BiPC with 50%+, NEET Qualified', duration: '5.5 Years including internship', nextSteps: 'MD/MS, DM/MCh, Practice, Government Doctor', topExams: 'NEET UG, NEET PG, INI-CET', careerScope: 'General Physician, Surgeon, Specialist Doctor, Medical Officer in Govt/Private', avgSalary: '6-50 LPA. Specialists: 15-80 LPA' },
+            'BDS': { fullName: 'Bachelor of Dental Surgery', eligibility: 'BiPC with 50%+, NEET Qualified', duration: '5 Years including internship', nextSteps: 'MDS, Private Clinic, Government Job', topExams: 'NEET UG', careerScope: 'Dentist, Orthodontist, Oral Surgeon, Dental College Faculty', avgSalary: '4-25 LPA' },
+            'BAMS': { fullName: 'Bachelor of Ayurvedic Medicine & Surgery', eligibility: 'BiPC, NEET Qualified', duration: '5.5 Years', nextSteps: 'MD Ayurveda, Practice, Government Job', topExams: 'NEET UG', careerScope: 'Ayurvedic Doctor, Panchakarma Specialist, Govt AYUSH Doctor', avgSalary: '3-15 LPA' },
+            'Nursing': { fullName: 'BSc Nursing', eligibility: 'BiPC with 45%+', duration: '4 Years', nextSteps: 'MSc Nursing, Hospital Jobs, Abroad', topExams: 'NEET, State Nursing CET, AIIMS Nursing', careerScope: 'Staff Nurse, Nursing Officer, ICU Nurse, Abroad: UK, Canada, Australia, USA', avgSalary: '2.5-8 LPA. Abroad: 40-80 LPA' },
+            'Pharmacy': { fullName: 'Bachelor of Pharmacy', eligibility: 'BiPC or MPC', duration: '4 Years', nextSteps: 'M.Pharm, Pharma Industry, Drug Inspector', topExams: 'EAMCET, GPAT for PG', careerScope: 'Pharmacist, Drug Inspector, Pharma Companies, Research, Medical Representative', avgSalary: '2.5-10 LPA' },
+            'Physiotherapy': { fullName: 'Bachelor of Physiotherapy', eligibility: 'BiPC with 50%+', duration: '4.5 Years', nextSteps: 'MPT, Private Clinic, Hospitals, Sports', topExams: 'NEET, State CET', careerScope: 'Physiotherapist, Sports Physio, Rehabilitation Centers, Hospitals', avgSalary: '3-12 LPA' },
+
+            // Commerce & Finance
+            'B.Com': { fullName: 'Bachelor of Commerce', eligibility: 'MEC/CEC/HEC Intermediate', duration: '3 Years', nextSteps: 'M.Com, MBA, CA, CMA, CS, Banking', topExams: 'CUET, CA Foundation', careerScope: 'Accountant, Banker, Auditor, Tax Consultant, Financial Analyst', avgSalary: '2.5-8 LPA' },
+            'BBA': { fullName: 'Bachelor of Business Administration', eligibility: 'Any stream Intermediate', duration: '3 Years', nextSteps: 'MBA, Jobs, Start own business', topExams: 'CUET, IPMAT, NPAT', careerScope: 'Manager, HR, Marketing, Operations, Entrepreneur, Sales', avgSalary: '3-12 LPA' },
+
+            // Professional Courses - Finance & Accounting Certifications
+            'CA': { fullName: 'Chartered Accountant', eligibility: '12th Pass, Register with ICAI', duration: '4-5 Years after 12th', nextSteps: 'Practice, Job in MNCs, Banks, Audit Firms, CFO', topExams: 'CA Foundation, CA Intermediate, CA Final', careerScope: 'Auditor, Tax Consultant, CFO, Financial Analyst, Big 4: Deloitte, EY, KPMG, PwC, Investment Banking', avgSalary: '8-25 LPA. Partners: 30-80 LPA' },
+            'CMA': { fullName: 'Cost & Management Accountant', eligibility: '12th Pass, Register with ICMAI', duration: '3-4 Years after 12th', nextSteps: 'Practice, Cost Audit, Industry Jobs, CFO', topExams: 'CMA Foundation, CMA Intermediate, CMA Final', careerScope: 'Cost Auditor, Management Accountant, CFO, Manufacturing Companies, PSUs, Banking', avgSalary: '7-20 LPA' },
+            'CS': { fullName: 'Company Secretary', eligibility: '12th Pass, Register with ICSI', duration: '3-4 Years after 12th', nextSteps: 'Practice, Corporate Jobs, Compliance Officer', topExams: 'CSEET, CS Executive, CS Professional', careerScope: 'Company Secretary, Legal Compliance, Corporate Governance, Listed Companies, M&A, SEBI', avgSalary: '6-18 LPA' },
+            'CFA': { fullName: 'Chartered Financial Analyst', eligibility: 'Graduate or Final Year Student', duration: '2-4 Years, 3 Levels', nextSteps: 'Portfolio Manager, Investment Banker, Research Analyst', topExams: 'CFA Level 1, Level 2, Level 3', careerScope: 'Investment Banking, Equity Research, Portfolio Management, Hedge Funds, Asset Management, Risk Management', avgSalary: '10-40 LPA. Global recognition' },
+            'ACCA': { fullName: 'Association of Chartered Certified Accountants', eligibility: '12th Pass with 65%+ in Accounts and Maths', duration: '2-3 Years, 13 Papers', nextSteps: 'Global Accounting Jobs, Audit, Finance Manager', topExams: 'ACCA Applied Knowledge, Applied Skills, Strategic Professional', careerScope: 'Global Accounting, Audit, Tax, Finance in 180+ countries, Big 4, MNCs', avgSalary: '6-20 LPA in India. Abroad: 30-70 LPA' },
+
+            // Law & Others
+            'BA LLB': { fullName: 'Bachelor of Arts + Bachelor of Law', eligibility: 'Any stream Intermediate with 45%+', duration: '5 Years', nextSteps: 'LLM, Practice, Judiciary, Corporate Law', topExams: 'CLAT, AILET, LSAT India', careerScope: 'Advocate, Judge, Legal Advisor, Corporate Lawyer, Public Prosecutor', avgSalary: '4-20 LPA. Senior Lawyers: 50+ LPA' },
+            'BHM': { fullName: 'Bachelor of Hotel Management', eligibility: 'Any stream Intermediate', duration: '4 Years', nextSteps: 'MHM, Hotel Industry, Cruise, Airlines', topExams: 'NCHMCT JEE', careerScope: 'Hotel Manager, Chef, F&B Manager, Cruise Line, Airlines, Event Management', avgSalary: '3-15 LPA' },
+            'Pilot Training': { fullName: 'Commercial Pilot License', eligibility: 'MPC with 50%+, Class 2 Medical Fit, Age 17+', duration: '18-24 Months', nextSteps: 'Airline Pilot, Charter Pilot, Flight Instructor', topExams: 'DGCA Exams, Airline Cadet Programs', careerScope: 'Airline Pilot: Indigo, Air India, Vistara, SpiceJet, International Airlines', avgSalary: '15-80 LPA. Captain: 50-120 LPA' },
+            'Fashion Design': { fullName: 'Bachelor of Design - Fashion', eligibility: 'Any stream Intermediate', duration: '4 Years', nextSteps: 'M.Des, Own Label, Fashion Houses', topExams: 'NIFT, NID, UCEED', careerScope: 'Fashion Designer, Stylist, Merchandiser, Boutique Owner, Textile Designer', avgSalary: '3-20 LPA' },
+
+            // Government Job Sectors - Civil Services
+            'IAS': { fullName: 'Indian Administrative Service', eligibility: 'Any Degree, Age 21-32 years', duration: 'Training: 2 Years at LBSNAA', nextSteps: 'District Collector, Secretary, Cabinet Secretary', topExams: 'UPSC Civil Services Exam - Prelims, Mains, Interview', careerScope: 'Top administrative post in India. Policy making, district administration, governance, development', avgSalary: 'Starting: 56100 per month. Cabinet Secretary: 250000 per month + perks' },
+            'IPS': { fullName: 'Indian Police Service', eligibility: 'Any Degree, Age 21-32 years', duration: 'Training: 2 Years at SVPNPA', nextSteps: 'SP, DIG, IG, DGP', topExams: 'UPSC Civil Services Exam', careerScope: 'Law and order, crime investigation, intelligence, security, CBI, NIA', avgSalary: 'Starting: 56100 per month. DGP: 225000 per month + perks' },
+            'IFS': { fullName: 'Indian Foreign Service', eligibility: 'Any Degree, Age 21-32 years', duration: 'Training: 3 Years', nextSteps: 'Ambassador, High Commissioner, MEA Secretary', topExams: 'UPSC Civil Services Exam', careerScope: 'Diplomacy, International Relations, Embassy Postings, UN Missions', avgSalary: 'Starting: 56100 per month + foreign allowance' },
+            'IRS': { fullName: 'Indian Revenue Service', eligibility: 'Any Degree, Age 21-32 years', duration: 'Training: 16 months', nextSteps: 'Income Tax Commissioner, Customs Commissioner, CBDT Chairman', topExams: 'UPSC Civil Services Exam', careerScope: 'Tax Administration, Customs, GST, Enforcement Directorate, Income Tax', avgSalary: 'Starting: 56100 per month + perks' },
+
+            // Banking
+            'SBI PO': { fullName: 'State Bank of India Probationary Officer', eligibility: 'Any Degree, Age 21-30 years', duration: 'Training: 2 Years probation', nextSteps: 'Assistant Manager, Branch Manager, AGM, GM, CGM', topExams: 'SBI PO Exam - Prelims, Mains, GD, Interview', careerScope: 'Banking operations, loans, customer service, branch management, forex', avgSalary: 'Starting: 41960 per month + allowances. Total CTC: 8-13 LPA' },
+            'IBPS PO': { fullName: 'Institute of Banking Personnel Selection PO', eligibility: 'Any Degree, Age 20-30 years', duration: 'Training: 2 Years probation', nextSteps: 'Assistant Manager, Manager, Senior Manager in PSU Banks', topExams: 'IBPS PO - Prelims, Mains, Interview', careerScope: 'Public Sector Banks: PNB, BOB, Canara Bank, Union Bank, Central Bank', avgSalary: 'Starting: 36000 per month. Total CTC: 7-10 LPA' },
+            'RBI': { fullName: 'Reserve Bank of India', eligibility: 'Graduate for Assistant, PG for Grade B', duration: 'Training: 6 months', nextSteps: 'Assistant, Grade B Officer, GM, Deputy Governor', topExams: 'RBI Grade B, RBI Assistant', careerScope: 'Central Bank, Monetary Policy, Banking Regulation, Currency Issue, Forex', avgSalary: 'Grade B: 77000 per month. Total CTC: 15-20 LPA' },
+            'NABARD': { fullName: 'National Bank for Agriculture & Rural Development', eligibility: 'Graduate, Age 21-30', duration: 'Training: 6 months', nextSteps: 'Development Assistant, Grade A Officer, CGM', topExams: 'NABARD Grade A/B', careerScope: 'Rural Development, Agriculture Finance, Policy, Microfinance', avgSalary: 'Grade A: 44500 per month. Total CTC: 10-15 LPA' },
+
+            // SSC
+            'SSC CGL': { fullName: 'Staff Selection Commission Combined Graduate Level', eligibility: 'Any Degree, Age 18-32 years', duration: 'NA', nextSteps: 'Income Tax Inspector, Assistant Section Officer, Auditor, Accountant', topExams: 'SSC CGL - Tier 1, Tier 2, Tier 3, Tier 4', careerScope: 'Central Govt departments: Income Tax, CBI, MEA, Railways, Postal, Excise', avgSalary: 'Level 6-8: 35400 to 112400 per month + DA, HRA' },
+            'SSC CHSL': { fullName: 'Combined Higher Secondary Level', eligibility: '12th Pass, Age 18-27 years', duration: 'NA', nextSteps: 'LDC, DEO, Postal Assistant, Court Clerk', topExams: 'SSC CHSL - Tier 1, Tier 2, Typing Test', careerScope: 'Clerical jobs in Central Govt departments, Ministries', avgSalary: 'Level 2-4: 19900 to 63200 per month' },
+            'SSC MTS': { fullName: 'Multi Tasking Staff', eligibility: '10th Pass, Age 18-25 years', duration: 'NA', nextSteps: 'Peon, Daftary, Jamadar, Senior Secretariat Assistant', topExams: 'SSC MTS - Paper 1, Paper 2', careerScope: 'Group C non-technical posts in Central Govt Ministries', avgSalary: 'Level 1: 18000 to 56900 per month' },
+            'SSC GD': { fullName: 'General Duty Constable', eligibility: '10th Pass, Age 18-23 years', duration: 'Training: 6 months', nextSteps: 'Constable, Head Constable, ASI', topExams: 'SSC GD - CBE, PET, PST, Medical', careerScope: 'CAPF: BSF, CRPF, CISF, ITBP, SSB, AR, NIA, SSF', avgSalary: 'Level 3: 21700 to 69100 per month' },
+
+            // Railways
+            'RRB NTPC': { fullName: 'Railway Recruitment Board Non-Technical Popular Categories', eligibility: '12th Pass or Graduate, Age 18-33 years', duration: 'Training: 6 months to 1 year', nextSteps: 'Station Master, Goods Guard, Clerk, Ticket Collector, CA', topExams: 'RRB NTPC - CBT 1, CBT 2, Typing Test, Document Verification', careerScope: 'Indian Railways - largest employer. Job security, pension, medical, passes', avgSalary: 'Level 2-6: 19900 to 35400 per month + allowances' },
+            'RRB Group D': { fullName: 'Railway Group D', eligibility: '10th Pass, Age 18-33 years', duration: 'Training: 3 months', nextSteps: 'Track Maintainer, Helper, Assistant, Pointsman', topExams: 'RRB Group D - CBT, PET, Medical', careerScope: 'Track maintenance, workshop, signal, electrical, engineering dept', avgSalary: 'Level 1: 18000 to 56900 per month' },
+            'RRB JE': { fullName: 'Junior Engineer', eligibility: 'Diploma or B.Tech, Age 18-33 years', duration: 'Training: 6 months', nextSteps: 'Senior Section Engineer, SSE, Chief Engineer', topExams: 'RRB JE - CBT 1, CBT 2, Document Verification', careerScope: 'Civil, Mechanical, Electrical, S&T in Railways, RDSO', avgSalary: 'Level 6: 35400 to 112400 per month' },
+            'RRB ALP': { fullName: 'Assistant Loco Pilot', eligibility: '10th + ITI or Diploma in Engineering, Age 18-30 years', duration: 'Training: 1 Year', nextSteps: 'Loco Pilot, Senior Loco Pilot, Loco Inspector', topExams: 'RRB ALP - CBT 1, CBT 2, CBAT, Document Verification', careerScope: 'Drive trains, responsible for passenger safety, technical job, running staff', avgSalary: 'Level 2: 19900 per month + running allowance 15000-25000. Total: 45000-60000 per month' },
+
+            // Defence
+            'Indian Army': { fullName: 'Indian Army', eligibility: '10th/12th/Graduate based on entry', duration: 'Training: 6 months to 1.5 years', nextSteps: 'Soldier, JCO, Officer through NDA/CDS/AFCAT/TES', topExams: 'Agniveer, NDA, CDS, AFCAT, TES', careerScope: 'Defend nation, disaster relief, UN peacekeeping, adventure, sports', avgSalary: 'Agniveer: 30000 per month. Officer: 56100 per month + MSP + allowances' },
+            'Indian Navy': { fullName: 'Indian Navy', eligibility: '10th/12th/B.Tech based on entry', duration: 'Training: 6 months to 4 years', nextSteps: 'Sailor, Officer through NDA/CDS/INET', topExams: 'Agniveer, NDA, CDS, INET', careerScope: 'Naval operations, submarine, aviation, marine engineering, logistics', avgSalary: 'Sailor: 21700 per month. Officer: 56100 per month + allowances' },
+            'Indian Air Force': { fullName: 'Indian Air Force', eligibility: '10th/12th/Graduate based on entry', duration: 'Training: 6 months to 1.5 years', nextSteps: 'Airman, Officer through NDA/CDS/AFCAT', topExams: 'Agniveer, NDA, CDS, AFCAT', careerScope: 'Pilot, Engineer, Ground Duty, Air Traffic Control, Fighter Pilot', avgSalary: 'Airman: 26900 per month. Officer: 56100 per month + allowances' },
+            'Coast Guard': { fullName: 'Indian Coast Guard', eligibility: '10th/12th/Graduate', duration: 'Training: 6 months', nextSteps: 'Navik, Yantrik, Assistant Commandant', topExams: 'ICG Navik, ICG Yantrik, AC', careerScope: 'Maritime security, search and rescue, pollution control, anti-smuggling', avgSalary: 'Navik: 21700 per month. AC: 56100 per month' },
+
+            // Private Job Sectors - IT & Tech Careers
+            'Software Development': { fullName: 'Software Developer', eligibility: 'B.Tech/BCA/MCA or equivalent skills', duration: 'NA', nextSteps: 'Senior Developer, Tech Lead, Architect, CTO', topExams: 'Company specific coding tests, HackerRank', careerScope: 'Build applications, websites, software products in IT companies, MNCs, Startups', avgSalary: '6-30 LPA. MNCs: 15-60 LPA' },
+            'Artificial Intelligence': { fullName: 'AI/ML Engineer', eligibility: 'B.Tech/M.Tech in CS/IT/Data Science', duration: 'NA', nextSteps: 'Senior AI Engineer, Research Scientist, AI Architect', topExams: 'GATE, Company tests', careerScope: 'Build AI models, ChatGPT, Self-driving cars, Recommendation systems, Computer Vision', avgSalary: '12-40 LPA. Top: 50-100 LPA' },
+            'Data Science': { fullName: 'Data Scientist', eligibility: 'B.Tech/B.Sc Stats/Maths/MCA', duration: 'NA', nextSteps: 'Senior Data Scientist, Head of Data, CDO', topExams: 'Company tests, Kaggle', careerScope: 'Analyze data, build ML models, business insights, Big Data, Analytics', avgSalary: '8-30 LPA' },
+            'Cyber Security': { fullName: 'Cyber Security Analyst', eligibility: 'B.Tech/BCA with certifications', duration: 'NA', nextSteps: 'Ethical Hacker, Security Architect, CISO', topExams: 'CEH, CISSP, CompTIA Security+', careerScope: 'Protect systems, ethical hacking, security audit, SOC, Penetration Testing', avgSalary: '8-25 LPA' },
+            'Cloud Computing': { fullName: 'Cloud Engineer', eligibility: 'B.Tech/BCA + AWS/Azure/GCP', duration: 'NA', nextSteps: 'Cloud Architect, DevOps Engineer, SRE', topExams: 'AWS Solutions Architect, Azure Admin, GCP Associate', careerScope: 'AWS, Azure, Google Cloud infrastructure, DevOps, Kubernetes, Docker', avgSalary: '10-30 LPA' },
+
+            // Other Sectors
+            'Healthcare': { fullName: 'Healthcare Professional', eligibility: 'MBBS/BDS/BAMS/Nursing/Pharmacy', duration: 'Varies', nextSteps: 'Specialization, Own Clinic, Hospital Admin', topExams: 'NEET PG, Hospital tests', careerScope: 'Doctor, Nurse, Pharmacist, Technician in hospitals, clinics, diagnostic centers', avgSalary: '3-50 LPA based on specialization' },
+            'Finance': { fullName: 'Finance Professional', eligibility: 'B.Com/MBA/CA/CFA', duration: 'NA', nextSteps: 'Senior Analyst, Manager, CFO', topExams: 'CFA, FRM, Company tests', careerScope: 'Investment Banking, Corporate Finance, Equity Research, Portfolio Management, Fintech', avgSalary: '6-40 LPA' },
+            'Marketing': { fullName: 'Marketing Professional', eligibility: 'BBA/MBA', duration: 'NA', nextSteps: 'Brand Manager, Marketing Head, CMO', topExams: 'CAT, Company tests', careerScope: 'Digital Marketing, Brand Management, Sales, Advertising, SEO, Social Media, Content', avgSalary: '4-25 LPA' },
+            'Sales': { fullName: 'Sales Executive/Manager', eligibility: 'Any Degree', duration: 'NA', nextSteps: 'Sales Manager, Regional Manager, VP Sales', topExams: 'Company tests', careerScope: 'B2B, B2C Sales, Business Development, Client Acquisition, Account Management', avgSalary: '3-20 LPA + incentives' },  // <-- Ee comma add chey
+            // UG - Undergraduate
+            'B.Tech': { fullName: 'Bachelor of Technology', eligibility: 'MPC Intermediate with 45%+', duration: '4 Years', nextSteps: 'M.Tech, MS Abroad, MBA, Jobs, Startups', topExams: 'JEE Main, JEE Advanced, EAMCET, BITSAT, VITEEE', careerScope: 'Software Engineer, Core Engineer, IT, PSU, Government Jobs, Entrepreneurship', avgSalary: '4-30 LPA. IIT/NIT: 15-60 LPA' },
+            'MBBS': { fullName: 'Bachelor of Medicine & Bachelor of Surgery', eligibility: 'BiPC with 50%+, NEET Qualified', duration: '5.5 Years including internship', nextSteps: 'MD/MS, DM/MCh, Practice, Government Doctor', topExams: 'NEET UG, NEET PG, INI-CET', careerScope: 'General Physician, Surgeon, Specialist Doctor, Medical Officer in Govt/Private', avgSalary: '6-50 LPA. Specialists: 15-80 LPA' },
+            'B.Sc': { fullName: 'Bachelor of Science', eligibility: 'MPC/BiPC Intermediate', duration: '3 Years', nextSteps: 'M.Sc, B.Ed, Research, Jobs, UPSC', topExams: 'CUET, State University Exams', careerScope: 'Research, Teaching, Lab Technician, IT, Data Analyst, Government Jobs', avgSalary: '2.5-8 LPA. After M.Sc: 4-15 LPA' },
+            'B.Com': { fullName: 'Bachelor of Commerce', eligibility: 'MEC/CEC/HEC Intermediate', duration: '3 Years', nextSteps: 'M.Com, MBA, CA, CMA, CS, Banking', topExams: 'CUET, CA Foundation', careerScope: 'Accountant, Banker, Auditor, Tax Consultant, Financial Analyst', avgSalary: '2.5-8 LPA' },
+            'BA': { fullName: 'Bachelor of Arts', eligibility: 'Any stream Intermediate', duration: '3 Years', nextSteps: 'MA, LLB, B.Ed, Civil Services, Journalism', topExams: 'CUET', careerScope: 'Civil Services, Teaching, Journalism, Content Writing, HR, Administration', avgSalary: '2.5-7 LPA' },
+            'BBA': { fullName: 'Bachelor of Business Administration', eligibility: 'Any stream Intermediate', duration: '3 Years', nextSteps: 'MBA, Jobs, Start own business', topExams: 'CUET, IPMAT, NPAT', careerScope: 'Manager, HR, Marketing, Operations, Entrepreneur, Sales', avgSalary: '3-12 LPA' },
+            'BCA': { fullName: 'Bachelor of Computer Applications', eligibility: 'Any stream with Maths, 50%+', duration: '3 Years', nextSteps: 'MCA, MBA, IT Jobs, Software Development', topExams: 'CUET, NIMCET for MCA', careerScope: 'Software Developer, Web Developer, System Analyst, IT Support, Database Admin', avgSalary: '3-12 LPA' },
+            'LLB': { fullName: 'Bachelor of Law', eligibility: 'Any Graduate Degree', duration: '3 Years', nextSteps: 'LLM, Practice, Judiciary, Corporate Law', topExams: 'CLAT PG, DU LLB, AILET', careerScope: 'Advocate, Legal Advisor, Judge, Corporate Counsel, Public Prosecutor', avgSalary: '4-20 LPA. Senior Lawyers: 50+ LPA' },
+
+            // PG - Postgraduate
+            'M.Tech': { fullName: 'Master of Technology', eligibility: 'B.Tech/B.E with 60%+', duration: '2 Years', nextSteps: 'PhD, Research, Teaching, PSU, MNC Jobs', topExams: 'GATE', careerScope: 'Specialized Engineer, R&D, Professor, Scientist in ISRO, DRDO, PSUs', avgSalary: '8-25 LPA. IIT/NIT: 15-40 LPA' },
+            'MBA': { fullName: 'Master of Business Administration', eligibility: 'Any Graduate with 50%+', duration: '2 Years', nextSteps: 'Manager, Consultant, Entrepreneur, CXO', topExams: 'CAT, XAT, MAT, GMAT, CMAT', careerScope: 'Management, Finance, Marketing, HR, Operations, Consulting, Investment Banking', avgSalary: '8-30 LPA. IIM: 20-60 LPA' },
+            'MCA': { fullName: 'Master of Computer Applications', eligibility: 'BCA/B.Sc CS/Maths Graduate', duration: '2 Years', nextSteps: 'Software Developer, IT Manager, Teaching', topExams: 'NIMCET, MAH MCA CET', careerScope: 'Software Developer, System Analyst, Database Admin, IT Manager', avgSalary: '4-15 LPA' },
+            'M.Sc': { fullName: 'Master of Science', eligibility: 'B.Sc in relevant subject', duration: '2 Years', nextSteps: 'PhD, Research, Teaching, Scientist', topExams: 'CUET PG, IIT JAM, GATE', careerScope: 'Research Scientist, Professor, Lab Manager, Data Scientist, R&D', avgSalary: '4-12 LPA' },
+            'MA': { fullName: 'Master of Arts', eligibility: 'BA in relevant subject', duration: '2 Years', nextSteps: 'PhD, Teaching, Civil Services, Journalism', topExams: 'CUET PG', careerScope: 'Professor, Civil Services, Content Writer, Journalist, HR, Counselor', avgSalary: '3-8 LPA' },
+            'M.Com': { fullName: 'Master of Commerce', eligibility: 'B.Com Graduate', duration: '2 Years', nextSteps: 'PhD, CA, Teaching, Banking, Finance', topExams: 'CUET PG', careerScope: 'Professor, Accountant, Financial Analyst, Banker, Tax Consultant', avgSalary: '3-10 LPA' },
+            'LLM': { fullName: 'Master of Law', eligibility: 'LLB Graduate', duration: '1-2 Years', nextSteps: 'PhD, Judiciary, Senior Advocate, Teaching', topExams: 'CLAT PG, AILET PG', careerScope: 'Specialized Lawyer, Judge, Legal Advisor, Professor, Corporate Counsel, Supreme Court Lawyer', avgSalary: '8-30 LPA. Senior: 50+ LPA' },
+
+            // Research
+            'PhD': { fullName: 'Doctor of Philosophy', eligibility: 'Postgraduate with 55%+, NET/JRF or University Test', duration: '3-6 Years', nextSteps: 'Post Doc, Professor, Scientist, Research', topExams: 'UGC NET, CSIR NET, GATE, University Entrance', careerScope: 'University Professor, Research Scientist, R&D Head, ISRO, DRDO, CSIR, Private R&D', avgSalary: '8-20 LPA. Professor: 12-30 LPA' },
+            'Post Doctoral': { fullName: 'Post Doctoral Research', eligibility: 'PhD Degree', duration: '1-3 Years', nextSteps: 'Senior Scientist, Professor, Principal Investigator', topExams: 'University/Research Institute Selection', careerScope: 'Advanced Research, International Fellowships, Lead Scientist, University Faculty, Govt Research Labs', avgSalary: '10-25 LPA in India. Abroad: 40-80 LPA' }, // <-- Add comma here
+            'Startup Founder': { fullName: 'Startup Founder - Tech Startup', eligibility: 'Any Graduate, Strong Business Idea', duration: 'NA', nextSteps: 'Incorporation, Funding, MVP, Scale', topExams: 'Startup India Registration, MSME Registration', careerScope: 'Build Product, Raise Funding, Angel Investors, VC, IPO, SaaS, Fintech, EdTech, HealthTech', avgSalary: '0-100+ LPA. Depends on funding and revenue. Founder equity based' },
+            // Entrepreneurship - Business Opportunities
+            'Startup Founder': { fullName: 'Startup Founder - Tech Startup', eligibility: 'Any Graduate, Strong Business Idea', duration: 'NA', nextSteps: 'Incorporation, Funding, MVP, Scale', topExams: 'Startup India Registration, MSME Registration', careerScope: 'Build Product, Raise Funding, Angel Investors, VC, IPO, SaaS, Fintech, EdTech, HealthTech', avgSalary: '0-100+ LPA. Depends on funding and revenue. Founder equity based' },
+            'E-Commerce': { fullName: 'E-Commerce - Online Store', eligibility: 'Any Background, Basic Business Knowledge', duration: 'NA', nextSteps: 'Website, GST, Marketplace Listing, Logistics', topExams: 'NA', careerScope: 'Amazon Seller, Flipkart Seller, Own Shopify Store, D2C Brand, Dropshipping, Export Import', avgSalary: '3-50 LPA. Depends on sales volume and margins' },
+            'Retail Business': { fullName: 'Retail Business - Shop', eligibility: 'Any Background, Investment Capital', duration: 'NA', nextSteps: 'Shop Setup, GST, Trade License, Inventory', topExams: 'NA', careerScope: 'Grocery, Apparel, Electronics, Pharmacy, Supermarket, Kirana Store, Showroom', avgSalary: '3-30 LPA. Depends on location and scale' },
+            'Franchise': { fullName: 'Franchise - Brand Franchise', eligibility: 'Investment Capital, Location', duration: 'NA', nextSteps: 'Brand Selection, Agreement, Setup, Training', topExams: 'NA', careerScope: 'Food Franchise: KFC, Dominos, Subway. Retail: Bata, Apollo Pharmacy. Education: Kidzee, NIIT', avgSalary: '5-40 LPA. ROI 15-30% annually based on brand' },
+            'Food Business': { fullName: 'Food Business - Restaurant', eligibility: 'Any Background, FSSAI License', duration: 'NA', nextSteps: 'Kitchen Setup, FSSAI, Trade License, Menu Planning', topExams: 'FSSAI Registration', careerScope: 'Restaurant, Cloud Kitchen, Cafe, Bakery, Tiffin Service, Catering, Zomato Swiggy Partner', avgSalary: '4-50 LPA. High margins in cloud kitchen model' },
+            'Digital Marketing Agency': { fullName: 'Digital Marketing Agency - SEO, Ads', eligibility: 'Marketing Skills, Any Graduate', duration: 'NA', nextSteps: 'Agency Setup, Client Acquisition, Team Building', topExams: 'Google Ads Certification, Meta Blueprint, HubSpot', careerScope: 'SEO, Social Media Marketing, Google Ads, Facebook Ads, Content Marketing, Client Services, SaaS Marketing', avgSalary: '5-40 LPA. Agency Owner: 10-100+ LPA based on clients' },
+            // Abroad Studies & International Careers - Study
+'United States': {fullName: 'Study in United States', eligibility: 'IELTS/TOEFL, SAT/GRE/GMAT, Strong Academics', duration: 'UG: 4 Years, PG: 1-2 Years', nextSteps: 'University Application, F1 Visa, Funding', topExams: 'IELTS, TOEFL, SAT, GRE, GMAT', careerScope: 'Tech, Finance, Research, Healthcare, Top Universities: MIT, Stanford, Harvard, UC Berkeley', avgSalary: 'MS CS: $100K-180K. MBA: $120K-200K'},
+'Canada': {fullName: 'Study in Canada', eligibility: 'IELTS 6.5+, 60%+ Academics', duration: 'UG: 4 Years, PG: 1-2 Years', nextSteps: 'University Application, SDS Study Permit, GIC', topExams: 'IELTS, TOEFL, GRE', careerScope: 'IT, Healthcare, Engineering, Business, PR Pathway, Universities: Toronto, UBC, McGill', avgSalary: 'After Study: CAD 60K-120K. PR: Easy Pathway'},
+'United Kingdom': {fullName: 'Study in United Kingdom', eligibility: 'IELTS 6.0+, Strong SOP', duration: 'UG: 3 Years, PG: 1 Year', nextSteps: 'University Application, CAS, Student Visa', topExams: 'IELTS, PTE, GMAT', careerScope: 'Finance, Law, Engineering, Arts, 2 Year PSW, Universities: Oxford, Cambridge, Imperial, LSE', avgSalary: 'After Study: GBP 35K-80K'},
+'Australia': {fullName: 'Study in Australia', eligibility: 'IELTS 6.0+, 55%+ Academics', duration: 'UG: 3-4 Years, PG: 1.5-2 Years', nextSteps: 'University Application, COE, Subclass 500 Visa', topExams: 'IELTS, PTE, TOEFL', careerScope: 'IT, Nursing, Engineering, Accounting, PR Pathway, Universities: Melbourne, Sydney, ANU', avgSalary: 'After Study: AUD 65K-110K. PSW: 2-4 Years'},
+'Germany': {fullName: 'Study in Germany', eligibility: 'IELTS/TOEFL, German A1-A2, 75%+ for TU9', duration: 'UG: 3-4 Years, PG: 2 Years', nextSteps: 'University Application, Blocked Account, Student Visa', topExams: 'IELTS, TOEFL, TestDaF, GRE', careerScope: 'Engineering, Automotive, Research, Free Public Universities, TUM, RWTH Aachen, LMU', avgSalary: 'After Study: EUR 45K-85K. Blue Card Pathway'},
+'France': {fullName: 'Study in France', eligibility: 'IELTS/TOEFL, French A2-B1 for French Taught', duration: 'UG: 3 Years, PG: 2 Years', nextSteps: 'Campus France, University Application, Student Visa', topExams: 'IELTS, TOEFL, TCF, DELF', careerScope: 'Luxury Management, Fashion, Engineering, Business, Affordable Education, HEC Paris, INSEAD, Sorbonne', avgSalary: 'After Study: EUR 38K-70K. PSW: 2 Years'},
+            // International Exams
+            'IELTS': { fullName: 'International English Language Testing System', eligibility: 'Anyone above 16 years', duration: 'Exam: 2 Hours 45 Minutes, Valid 2 Years', nextSteps: 'Apply to Universities, Immigration, Jobs Abroad', topExams: 'Academic and General Training', careerScope: 'Mandatory for UK, Canada, Australia, NZ admissions and PR. Score 6.0-9.0', avgSalary: 'Required for jobs paying $60K-150K abroad' },
+            'TOEFL': { fullName: 'Test of English as a Foreign Language', eligibility: 'Anyone', duration: 'Exam: 2 Hours, Valid 2 Years', nextSteps: 'Apply to US Universities', topExams: 'TOEFL iBT', careerScope: 'Required for US, Canada Universities. Score 80-120', avgSalary: 'Required for jobs paying $80K-180K in USA' },
+            'PTE': { fullName: 'Pearson Test of English', eligibility: 'Anyone above 16 years', duration: 'Exam: 2 Hours, Valid 2 Years', nextSteps: 'Apply to Australia, UK, Canada Universities', topExams: 'PTE Academic', careerScope: 'Accepted for Australia, UK, Canada Study and PR. Score 50-90', avgSalary: 'Required for jobs paying AUD 60K-120K in Australia' },
+            'GRE': { fullName: 'Graduate Record Examination', eligibility: 'Graduate or Final Year Student', duration: 'Exam: 1 Hour 58 Minutes, Valid 5 Years', nextSteps: 'Apply to MS, PhD Abroad', topExams: 'GRE General Test', careerScope: 'Required for MS in USA, Canada, Germany. Score 260-340. 320+ for top universities', avgSalary: 'MS leads to jobs $90K-180K' },
+            'GMAT': { fullName: 'Graduate Management Admission Test', eligibility: 'Graduate', duration: 'Exam: 2 Hours 15 Minutes, Valid 5 Years', nextSteps: 'Apply to MBA Abroad', topExams: 'GMAT Focus Edition', careerScope: 'Required for MBA in USA, Europe, Canada. Score 205-805. 700+ for top B-Schools', avgSalary: 'MBA leads to jobs $120K-250K' },
+            'SAT': { fullName: 'Scholastic Assessment Test', eligibility: '11th, 12th Students', duration: 'Exam: 2 Hours 14 Minutes, Valid 5 Years', nextSteps: 'Apply to UG in USA, Canada', topExams: 'SAT', careerScope: 'Required for Undergraduate admissions in USA, Canada. Score 400-1600. 1400+ for top universities', avgSalary: 'UG leads to jobs $70K-150K after graduation' },
+
+            // Work Opportunities Abroad
+            'Software Engineer Abroad': { fullName: 'Software Engineer - International', eligibility: 'B.Tech/BCA/MCA, IELTS, Work Experience', duration: 'NA', nextSteps: 'Job Search, H1B Visa USA, Canada PR, EU Blue Card', topExams: 'IELTS, Company Coding Tests', careerScope: 'FAANG, Microsoft, Google, Amazon in USA, Canada, UK, Germany, Australia, Netherlands', avgSalary: '$80K-200K per year. Silicon Valley: $150K-400K' },
+            'Data Scientist Abroad': { fullName: 'Data Scientist - International', eligibility: 'MS in Data Science/CS, IELTS/GRE, Python/R', duration: 'NA', nextSteps: 'Job Search, H1B, Canada PR, EU Blue Card', topExams: 'IELTS, GRE, Company Tests', careerScope: 'Tech, Finance, Healthcare companies in USA, UK, Canada, Germany, Singapore', avgSalary: '$90K-180K per year' },
+            'Doctor Abroad': { fullName: 'Doctor - International Practice', eligibility: 'MBBS, USMLE/PLAB/AMC, IELTS', duration: 'USMLE: 2-3 Years, PLAB: 1-2 Years', nextSteps: 'USMLE Steps, Residency Match USA. PLAB UK. AMC Australia', topExams: 'USMLE, PLAB, AMC, IELTS', careerScope: 'Practice in USA, UK, Canada, Australia, Germany. Residency required', avgSalary: '$250K-400K per year in USA. £80K-150K in UK' },
+            'Nurse Abroad': { fullName: 'Nurse - International', eligibility: 'B.Sc Nursing, IELTS, NCLEX/CBT', duration: 'NA', nextSteps: 'NCLEX for USA, CBT for UK, NNAS for Canada', topExams: 'IELTS 7.0, NCLEX-RN, CBT, OSCE', careerScope: 'Hospitals in USA, UK, Canada, Australia, Germany, Middle East. High demand', avgSalary: '$60K-120K per year. UK: £28K-45K. Canada: CAD 70K-100K' }
+        };
         function scrollToSection(id) {
             const element = document.getElementById(id);
             if (element) {
@@ -540,15 +1351,15 @@
             }
         }
 
-        window.toggleSector = function(header) {
+        window.toggleSector = function (header) {
             const content = header.nextElementSibling;
             const icon = header.querySelector('.icon');
             content.classList.toggle('active');
             icon.classList.toggle('rotate');
-            icon.innerHTML = content.classList.contains('active')? '▲' : '▼';
+            icon.innerHTML = content.classList.contains('active') ? '▲' : '▼';
         }
 
-        window.showDetails = function(key) {
+        window.showDetails = function (key) {
             const data = careerData[key];
             if (!data) {
                 alert('Details coming soon for ' + key);
@@ -566,28 +1377,29 @@
             document.getElementById('detailModal').style.display = 'block';
         }
 
-        window.closeModal = function() {
+        window.closeModal = function () {
             document.getElementById('detailModal').style.display = 'none';
         }
 
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             const modal = document.getElementById('detailModal');
             if (event.target == modal) {
                 closeModal();
             }
         }
 
-        window.logout = function() {
+        window.logout = function () {
             document.getElementById('logoutPopup').style.display = 'flex';
         }
 
-        window.confirmLogout = function() {
+        window.confirmLogout = function () {
             window.location.href = 'login.html';
         }
 
-        window.cancelLogout = function() {
+        window.cancelLogout = function () {
             document.getElementById('logoutPopup').style.display = 'none';
         }
     </script>
 </body>
+
 </html>
