@@ -1,33 +1,79 @@
-# Career Guidance Portal 🎓
+# Career Guidance Portal
 
-[![GitHub Pages](https://img.shields.io/badge/View%20Live-GitHub%20Pages-brightgreen)](https://snehikapamarthi.github.io/career-guidance/)
+A free web platform that helps students choose the right career after 10th and Intermediate.
 
-A comprehensive web portal designed to help 10th & Intermediate students make informed decisions about their academic and career paths.
+**Live Website**: https://career-guidance-five-virid.vercel.app
 
-## 🌐 Live Demo
-**Website:** https://snehikapamarthi.github.io/career-guidance/
+## About
 
-## 📋 Overview
-This portal provides detailed guidance on:
-- Stream selection after 10th grade
-- Career opportunities after 12th
-- Entrance exam information and preparation tips
-- Higher education pathways
+This project provides complete career information in one place. It covers streams, entrance exams, jobs, higher education, and study abroad options to help students make informed decisions.
 
-## ✨ Features
-- **Interactive UI:** Clean, responsive design for mobile & desktop
-- **Stream Guidance:** Science, Commerce, Arts stream breakdowns
-- **Career Mapping:** Detailed career paths with scope & salary insights
-- **Exam Info:** JEE, NEET, CLAT, CA Foundation, and more
-- **Resource Library:** Study materials and external links
+## Features
 
-## 🛠️ Tech Stack
-- **Frontend:** HTML5, CSS3, JavaScript
-- **Hosting:** GitHub Pages
-- **Version Control:** Git
+- **Mobile Friendly**: Works on all devices
+- **User Login**: Secure authentication with Firebase
+- **Contact Form**: Submit queries that are saved to database
+- **Complete Information**: Covers 9 major career areas
+- **Free Access**: No cost to use
 
-## 🚀 Getting Started
-To run locally:
+## Career Modules
+
+1. Streams After 10th - Science, Commerce, Arts
+2. Streams After Intermediate - MPC, BiPC, MEC, CEC options
+3. Entrance Exams - JEE, NEET, CLAT, EAMCET details
+4. Government Jobs - UPSC, Banking, Railway, Defence
+5. Private Jobs - IT, Marketing, Finance, Design
+6. Professional Courses - CA, Law, Architecture
+7. Higher Education - UG, PG, PhD guidance
+8. Entrepreneurship - Startup basics and schemes
+9. Study Abroad - USA, UK, Canada, Australia process
+
+## Tech Stack
+
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Authentication**: Firebase Authentication
+- **Database**: Firebase Firestore
+- **Hosting**: Vercel
+- **Version Control**: GitHub
+
+## How It Works
+
+1. Student visits the website and browses career information
+2. Optional login using Email or Google account
+3. Students can submit questions through the contact form
+4. Data is stored securely in Firebase Firestore
+
+## Database
+
+**Firebase Firestore** is used as the cloud database.
+- Collection: `contacts`
+- Stores: name, email, message, timestamp
+- Security rules ensure only valid data is accepted
+
+## Deployment
+
+The website is hosted on Vercel with automatic deployment from GitHub. 
+- **Cost**: Free
+- **Performance**: Global CDN with HTTPS
+- **Build Time**: ~30 seconds
+
+## Future Scope
+
+1. AI-based career recommendations
+2. Scholarship database
+3. College predictor tool
+4. Job notification system
+5. Career assessment quiz
+
+## Project Details
+
+**Type**: Community Service Project (CSP)  
+**Team Size**: 6 Members  
+**Duration**: 4 Weeks  
+**Year**: 2026
+
+## Run Locally
+
 ```bash
-git clone https://github.com/snehikapamarthi/career-guidance.git
+git clone https://github.com/snehikapasumarthi/career-guidance.git
 cd career-guidance
