@@ -2,6 +2,29 @@
 <html lang="en">
 
 <head>
+    <head>
+  <meta charset="UTF-8">
+  <title>Career Guidance</title>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyAyVcmmVFHwYpn_ZZrYdQfOMmG-WPwQl6o",
+      authDomain: "career-guidance-203da.firebaseapp.com",
+      projectId: "career-guidance-203da",
+      storageBucket: "career-guidance-203da.firebasestorage.app",
+      messagingSenderId: "1428869256",
+      appId: "1:1428869256:web:254bb5f56b857c42100f3d"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    
+    onAuthStateChanged(auth, (user) => {
+      if (!user) window.location.replace('login.html');
+    });
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Career Guidance - Career Portal</title>
@@ -1289,7 +1312,7 @@
             'Healthcare': { fullName: 'Healthcare Professional', eligibility: 'MBBS/BDS/BAMS/Nursing/Pharmacy', duration: 'Varies', nextSteps: 'Specialization, Own Clinic, Hospital Admin', topExams: 'NEET PG, Hospital tests', careerScope: 'Doctor, Nurse, Pharmacist, Technician in hospitals, clinics, diagnostic centers', avgSalary: '3-50 LPA based on specialization' },
             'Finance': { fullName: 'Finance Professional', eligibility: 'B.Com/MBA/CA/CFA', duration: 'NA', nextSteps: 'Senior Analyst, Manager, CFO', topExams: 'CFA, FRM, Company tests', careerScope: 'Investment Banking, Corporate Finance, Equity Research, Portfolio Management, Fintech', avgSalary: '6-40 LPA' },
             'Marketing': { fullName: 'Marketing Professional', eligibility: 'BBA/MBA', duration: 'NA', nextSteps: 'Brand Manager, Marketing Head, CMO', topExams: 'CAT, Company tests', careerScope: 'Digital Marketing, Brand Management, Sales, Advertising, SEO, Social Media, Content', avgSalary: '4-25 LPA' },
-            'Sales': { fullName: 'Sales Executive/Manager', eligibility: 'Any Degree', duration: 'NA', nextSteps: 'Sales Manager, Regional Manager, VP Sales', topExams: 'Company tests', careerScope: 'B2B, B2C Sales, Business Development, Client Acquisition, Account Management', avgSalary: '3-20 LPA + incentives' },  // <-- Ee comma add chey
+            'Sales': { fullName: 'Sales Executive/Manager', eligibility: 'Any Degree', duration: 'NA', nextSteps: 'Sales Manager, Regional Manager, VP Sales', topExams: 'Company tests', careerScope: 'B2B, B2C Sales, Business Development, Client Acquisition, Account Management', avgSalary: '3-20 LPA + incentives' },
             // UG - Undergraduate
             'B.Tech': { fullName: 'Bachelor of Technology', eligibility: 'MPC Intermediate with 45%+', duration: '4 Years', nextSteps: 'M.Tech, MS Abroad, MBA, Jobs, Startups', topExams: 'JEE Main, JEE Advanced, EAMCET, BITSAT, VITEEE', careerScope: 'Software Engineer, Core Engineer, IT, PSU, Government Jobs, Entrepreneurship', avgSalary: '4-30 LPA. IIT/NIT: 15-60 LPA' },
             'MBBS': { fullName: 'Bachelor of Medicine & Bachelor of Surgery', eligibility: 'BiPC with 50%+, NEET Qualified', duration: '5.5 Years including internship', nextSteps: 'MD/MS, DM/MCh, Practice, Government Doctor', topExams: 'NEET UG, NEET PG, INI-CET', careerScope: 'General Physician, Surgeon, Specialist Doctor, Medical Officer in Govt/Private', avgSalary: '6-50 LPA. Specialists: 15-80 LPA' },
@@ -1311,7 +1334,7 @@
 
             // Research
             'PhD': { fullName: 'Doctor of Philosophy', eligibility: 'Postgraduate with 55%+, NET/JRF or University Test', duration: '3-6 Years', nextSteps: 'Post Doc, Professor, Scientist, Research', topExams: 'UGC NET, CSIR NET, GATE, University Entrance', careerScope: 'University Professor, Research Scientist, R&D Head, ISRO, DRDO, CSIR, Private R&D', avgSalary: '8-20 LPA. Professor: 12-30 LPA' },
-            'Post Doctoral': { fullName: 'Post Doctoral Research', eligibility: 'PhD Degree', duration: '1-3 Years', nextSteps: 'Senior Scientist, Professor, Principal Investigator', topExams: 'University/Research Institute Selection', careerScope: 'Advanced Research, International Fellowships, Lead Scientist, University Faculty, Govt Research Labs', avgSalary: '10-25 LPA in India. Abroad: 40-80 LPA' }, // <-- Add comma here
+            'Post Doctoral': { fullName: 'Post Doctoral Research', eligibility: 'PhD Degree', duration: '1-3 Years', nextSteps: 'Senior Scientist, Professor, Principal Investigator', topExams: 'University/Research Institute Selection', careerScope: 'Advanced Research, International Fellowships, Lead Scientist, University Faculty, Govt Research Labs', avgSalary: '10-25 LPA in India. Abroad: 40-80 LPA' },
             'Startup Founder': { fullName: 'Startup Founder - Tech Startup', eligibility: 'Any Graduate, Strong Business Idea', duration: 'NA', nextSteps: 'Incorporation, Funding, MVP, Scale', topExams: 'Startup India Registration, MSME Registration', careerScope: 'Build Product, Raise Funding, Angel Investors, VC, IPO, SaaS, Fintech, EdTech, HealthTech', avgSalary: '0-100+ LPA. Depends on funding and revenue. Founder equity based' },
             // Entrepreneurship - Business Opportunities
             'Startup Founder': { fullName: 'Startup Founder - Tech Startup', eligibility: 'Any Graduate, Strong Business Idea', duration: 'NA', nextSteps: 'Incorporation, Funding, MVP, Scale', topExams: 'Startup India Registration, MSME Registration', careerScope: 'Build Product, Raise Funding, Angel Investors, VC, IPO, SaaS, Fintech, EdTech, HealthTech', avgSalary: '0-100+ LPA. Depends on funding and revenue. Founder equity based' },
@@ -1401,5 +1424,4 @@
         }
     </script>
 </body>
-
 </html>

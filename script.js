@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAyVcmmVFHwYpn_ZZrYdQfOMmG-WPwQl6o",
@@ -13,6 +13,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+onAuthStateChanged(auth, (user) => {
+  const currentPage = window.location.pathname;
+  if (currentPage.includes('login.html')) return; // small l
+  if (!user) window.location.href = 'login.html'; // small l
+});
 const careerData = {
     'MPC': {fullName: 'Maths, Physics, Chemistry', eligibility: '10th Pass with 55%+ marks', duration: '2 Years Intermediate', nextSteps: 'B.Tech, B.E, B.Sc, BCA, NDA, Aviation, Merchant Navy', topExams: 'JEE Main, JEE Advanced, EAMCET, BITSAT', careerScope: 'Engineering, IT, Software, Civil Services, Defence, Scientist', avgSalary: 'After B.Tech: 4-30 LPA depending on college and branch'},
     'BiPC': {fullName: 'Biology, Physics, Chemistry', eligibility: '10th Pass with 50%+ marks', duration: '2 Years Intermediate', nextSteps: 'MBBS, BDS, BAMS, BHMS, Nursing, Pharmacy, Agriculture, Veterinary', topExams: 'NEET, EAMCET, AIIMS', careerScope: 'Doctor, Dentist, Ayurveda, Homeopathy, Pharma, Research, Agriculture Officer', avgSalary: 'MBBS Doctor: 6-50 LPA. Pharmacy: 3-8 LPA'},
@@ -98,10 +103,10 @@ const careerData = {
     'Franchise': {fullName: 'Franchise Business', eligibility: 'Investment capacity', duration: 'NA', nextSteps: 'Multiple franchises', topExams: 'NA', careerScope: 'McDonalds, Dominos, Any brand franchise', avgSalary: '5-50 LPA per outlet'},
     'Food Business': {fullName: 'Restaurant/Cloud Kitchen', eligibility: 'Any', duration: 'NA', nextSteps: 'Chain of restaurants', topExams: 'NA', careerScope: 'Restaurant, Cafe, Cloud Kitchen, Catering', avgSalary: '3-100 LPA based on scale'},
     'Digital Marketing Agency': {fullName: 'Digital Marketing Agency', eligibility: 'Any + Skills', duration: 'NA', nextSteps: 'Scale to 100+ clients', topExams: 'Google, Meta Certifications', careerScope: 'SEO, Social Media, Ads for clients', avgSalary: '5-100 LPA based on clients'},
-    'USA': {fullName: 'Study in United States', eligibility: '12th for UG, Degree for PG', duration: 'UG: 4 years, PG: 2 years', nextSteps: 'OPT, H1B, Green Card', topExams: 'SAT/ACT, GRE/GMAT, TOEFL/IELTS', careerScope: 'Tech, Finance, Research, Healthcare', avgSalary: 'After MS: $80k-150k'},
+    'United States': {fullName: 'Study in United States', eligibility: '12th for UG, Degree for PG', duration: 'UG: 4 years, PG: 2 years', nextSteps: 'OPT, H1B, Green Card', topExams: 'SAT/ACT, GRE/GMAT, TOEFL/IELTS', careerScope: 'Tech, Finance, Research, Healthcare', avgSalary: 'After MS: $80k-150k'},
     'Canada': {fullName: 'Study in Canada', eligibility: '12th for UG, Degree for PG', duration: 'UG: 4 years, PG: 1-2 years', nextSteps: 'PGWP, PR, Citizenship', topExams: 'IELTS, TOEFL', careerScope: 'IT, Healthcare, Engineering, PR easy', avgSalary: 'After PG: CAD 60k-100k'},
-    'UK': {fullName: 'Study in United Kingdom', eligibility: '12th for UG, Degree for PG', duration: 'UG: 3 years, PG: 1 year', nextSteps: 'Graduate Visa, Skilled Worker Visa', topExams: 'IELTS', careerScope: 'Finance, Law, Engineering, Healthcare', avgSalary: 'After PG: £30k-60k'},
-    'Australia': {fullName: 'Study in Australia', eligibility: '12th for UG, Degree for PG', duration: 'UG: 3 years, PG: 2 years', nextSteps: 'Post Study Work, PR', topExams: 'IELTS, PTE', careerScope: 'IT, Nursing, Engineering, PR friendly', avgSalary: 'After PG: AUD 60k-100k'},
+    'United Kingdom': {fullName: 'Study in United Kingdom', eligibility: '12th for UG, Degree for PG', duration: 'UG: 3 years, PG: 1 year', nextSteps: 'Work Visa, PR', topExams: 'IELTS, TOEFL', careerScope: 'Finance, IT, Healthcare, Research', avgSalary: 'After PG: £30k-60k'},
+        'Australia': {fullName: 'Study in Australia', eligibility: '12th for UG, Degree for PG', duration: 'UG: 3 years, PG: 2 years', nextSteps: 'Post Study Work, PR', topExams: 'IELTS, PTE', careerScope: 'IT, Nursing, Engineering, PR friendly', avgSalary: 'After PG: AUD 60k-100k'},
     'Germany': {fullName: 'Study in Germany', eligibility: '12th for UG, Degree for PG', duration: 'UG: 3 years, PG: 2 years', nextSteps: 'Job Seeker Visa, Blue Card', topExams: 'IELTS, TestDaF for German', careerScope: 'Engineering, Automobile, Research. Low/No tuition fee', avgSalary: 'After PG: €45k-70k'},
     'France': {fullName: 'Study in France', eligibility: '12th for UG, Degree for PG', duration: 'UG: 3 years, PG: 2 years', nextSteps: 'APS, Job search visa', topExams: 'IELTS, TCF for French', careerScope: 'Luxury, Fashion, Engineering, Business', avgSalary: 'After PG: €35k-60k'},
     'Software Engineer Abroad': {fullName: 'Software Engineer - International', eligibility: 'B.Tech + Experience', duration: 'NA', nextSteps: 'Senior, Architect, EM', topExams: 'Coding interviews', careerScope: 'FAANG: Google, Meta, Amazon, Microsoft', avgSalary: 'USA: $120k-300k. Canada: CAD 90k-180k'},
@@ -156,7 +161,7 @@ function logout() {
 
 function confirmLogout() {
     signOut(auth).then(() => {
-        window.location.href = 'login.html';
+        window.location.href = 'Login.html';
     }).catch((error) => {
         console.log(error);
     });
