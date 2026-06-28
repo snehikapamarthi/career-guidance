@@ -1,4 +1,4 @@
-# Career Guidance Portal
+# Career Guidance
 
 A free web platform that helps students choose the right career after 10th and Intermediate.
 
