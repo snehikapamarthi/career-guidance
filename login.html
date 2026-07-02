@@ -11,18 +11,18 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh; display: flex; justify-content: center; align-items: center;
         }
-        .container {
+       .container {
             background: white; padding: 40px; border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 400px;
         }
         h2 { text-align: center; color: #667eea; margin-bottom: 30px; }
-        .tabs { display: flex; margin-bottom: 30px; }
-        .tab {
+       .tabs { display: flex; margin-bottom: 30px; }
+       .tab {
             flex: 1; padding: 12px; text-align: center; cursor: pointer;
             border-bottom: 3px solid #ddd; color: #999; font-weight: 600;
         }
-        .tab.active { color: #667eea; border-bottom-color: #667eea; }
-        .form-group { margin-bottom: 20px; }
+       .tab.active { color: #667eea; border-bottom-color: #667eea; }
+       .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; color: #333; font-weight: 500; }
         input {
             width: 100%; padding: 12px; border: 2px solid #e0e0e0;
@@ -35,10 +35,10 @@
             font-weight: 600; cursor: pointer; margin-top: 10px;
         }
         button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); }
-        .error { color: #e74c3c; font-size: 14px; margin-top: 10px; text-align: center; }
-        .success { color: #27ae60; font-size: 14px; margin-top: 10px; text-align: center; }
-        .form { display: none; }
-        .form.active { display: block; }
+       .error { color: #e74c3c; font-size: 14px; margin-top: 10px; text-align: center; }
+       .success { color: #27ae60; font-size: 14px; margin-top: 10px; text-align: center; }
+       .form { display: none; }
+       .form.active { display: block; }
     </style>
 </head>
 <body>
@@ -79,6 +79,7 @@
             <div id="signupMsg"></div>
         </div>
     </div>
+
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
   import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
@@ -98,7 +99,7 @@
   window.showTab = (tab) => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
-    
+
     if (tab === 'login') {
       document.querySelector('.tab:nth-child(1)').classList.add('active');
       document.getElementById('loginForm').classList.add('active');
@@ -112,18 +113,21 @@
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     const msgDiv = document.getElementById('loginMsg');
-    
-    if (!email || !password) {
+
+    if (!email ||!password) {
       msgDiv.innerHTML = '<div class="error">Enter email and password</div>';
       return;
     }
 
     signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
+     .then((userCredential) => {
+        const user = userCredential.user;
+        // Save username to localStorage for home.html
+        localStorage.setItem('loggedInUser', user.displayName || email.split('@')[0]);
         msgDiv.innerHTML = '<div class="success">Login successful! Redirecting...</div>';
-        setTimeout(() => window.location.href = 'index.html', 1000);
+        setTimeout(() => window.location.href = 'home.html', 1000);
       })
-      .catch((error) => {
+     .catch((error) => {
         msgDiv.innerHTML = `<div class="error">${error.message}</div>`;
       });
   };
@@ -133,8 +137,8 @@
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
     const msgDiv = document.getElementById('signupMsg');
-    
-    if (!name || !email || !password) {
+
+    if (!name ||!email ||!password) {
       msgDiv.innerHTML = '<div class="error">Fill all fields</div>';
       return;
     }
@@ -145,17 +149,19 @@
     }
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+     .then((userCredential) => {
         return updateProfile(userCredential.user, { displayName: name });
       })
-      .then(() => {
+     .then(() => {
+        // Save username to localStorage for home.html
+        localStorage.setItem('loggedInUser', name);
         msgDiv.innerHTML = '<div class="success">Account created! Redirecting...</div>';
-        setTimeout(() => window.location.href = 'index.html', 1000);
+        setTimeout(() => window.location.href = 'home.html', 1000);
       })
-      .catch((error) => {
+     .catch((error) => {
         msgDiv.innerHTML = `<div class="error">${error.message}</div>`;
       });
   };
 </script>
-   </body>
+</body>
 </html>
